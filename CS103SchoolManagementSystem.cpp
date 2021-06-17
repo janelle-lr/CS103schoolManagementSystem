@@ -100,6 +100,10 @@ void addingStudentCSV(struct Student* studentPtr, vector<Student> studentsVtr, v
 void displayRecords(struct Student* studentPtr, vector<Student> studentsVtr, int classRecordChoice);
 void displayReport(struct Student* studentPtr, vector<Student> studentsVtr, int displayRprtChoice);
 vector<Student> updatingStudentCSV(vector<Student> studentsVtr, vector<string> emptyDataVtr);
+void teachClassRecord(struct Teacher* teacherPtr, vector<Teacher> teacherVtr, vector<string> teacherEmpData, struct Student* studentPtr,
+	vector<Student> studentsVtr, vector<string> emptyDataVtr);
+void teachActions(struct Teacher* teacherPtr, vector<Teacher> teacherVtr, vector<string> teacherEmpData, struct Student* studentPtr,
+	vector<Student> studentsVtr, vector<string> emptyDataVtr);
 void adminActions(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Student* studentPtr, struct Parent* parentPtr,
 	vector<Teacher> teacherVtr, vector<Admin> adminVtr, vector<Student> studentsVtr, vector<Parent> parentVtr,
 	vector<string> teacherEmpData, vector<string> adminEmpData, vector<string> emptyDataVtr, vector<string> parentEmpData);
@@ -601,6 +605,55 @@ vector<Student> updatingStudentCSV(vector<Student> studentsVtr, vector<string> e
 }
 //Janelle's code end
 
+//Livs Code Start
+void teachClassRecord(struct Teacher* teacherPtr, vector<Teacher> teacherVtr, vector<string> teacherEmpData, struct Student* studentPtr,
+	vector<Student> studentsVtr, vector<string> emptyDataVtr) {
+	schoolTitle();
+	
+	cout << "\n\t\t\t<-Signed In As Teacher->" <<  endl;//Teacher Name output
+	cout << "\n\t\t\tClassRoom 1 Records" << endl;
+	cout << "\n3. Student 1(students Name)" << endl;
+	cout << "\n4. Student 2(students Name)" << endl;
+	cout << "\n5. Student 3(students Name)" << endl;
+	
+	cout << "\n\n2. Main Menu" << endl;
+	cout << "\n4. Exit" << endl;
+
+}
+//Livs Code End
+
+//Livs Code Start
+//Teacher options output (to access the chosen choice, e.g student 1, main menu or to exit the program.
+void teachActions(struct Teacher* teacherPtr, vector<Teacher> teacherVtr,vector<string> teacherEmpData, struct Student* studentPtr,
+	vector<Student> studentsVtr,vector<string> emptyDataVtr ) {
+
+	int teacherChoice = 0, recordChoice, studRecChoice, classRecordChoice, displayRprtChoice;
+	starLine(66);
+	cout << "\nEnter Number For Chosen Option" << endl;
+	cin >> teacherChoice;
+
+	switch (teacherChoice) {
+	case 3: //Accessing Student 1
+		cout << "\naccessing student 1" << endl;
+		break;
+	case 4: //Accessing Student 2
+		cout << "\naccessing student 2" << endl;
+		break;
+	case 5: //Accessing Student 3
+		cout << "\naccessing student 3" << endl;
+		break;
+	case 2: // Accessing Back to Main menu
+		cout << "\naccessing Back to Main menu" << endl;
+		break;
+	case 6: //Accessing the Exit
+		cout << "\nExitting" << endl;
+		break;
+
+	}
+
+}
+//Livs Code End
+
 //Janelle's code start
 void adminActions(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Student* studentPtr, struct Parent* parentPtr,
 	vector<Teacher> teacherVtr, vector<Admin> adminVtr, vector<Student> studentsVtr, vector<Parent> parentVtr,
@@ -759,6 +812,7 @@ void studentParentActions(struct Student* studentPtr, struct Parent* parentPtr, 
 
 	cout << "\n\t\t\t\t\t\t\t\t1.End" << endl;
 	starLine(66);
+	
 }
 
 //SIGNING UP INPUT DETAILS
@@ -766,7 +820,7 @@ void writingToCSV(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Stu
 	vector<Teacher> teacherVtr, vector<Admin> adminVtr, vector<Student> studentsVtr, vector<Parent> parentVtr,
 	vector<string> teacherEmpData, vector<string> adminEmpData, vector<string> emptyDataVtr, vector<string> parentEmpData, int signupOption) {
 
-	//livs code start
+	//livs code start & Teacher SignUp
 	schoolTitle();//Olivia's code
 
 	if (signupOption == 1) {
@@ -802,10 +856,12 @@ void writingToCSV(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Stu
 			<< "," << adminPtr->accountDetails.password << endl; //writing user input into csv file
 		teacherFile.close();
 
-		//call teacher welcome screen
-
+		//call teacher ClassRoom screen
+		teachClassRecord(teacherPtr, teacherVtr, teacherEmpData, studentPtr, studentsVtr, emptyDataVtr);
+		teachActions(teacherPtr, teacherVtr, teacherEmpData, studentPtr, studentsVtr, emptyDataVtr);
 		//Janelle's code end
 	}//livs code end
+
 	else if (signupOption == 2) {
 		//Janelle's code start
 		cout << "\n\t\t\t<-Admin Signup->" << endl;
@@ -873,6 +929,7 @@ void writingToCSV(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Stu
 		parentFile.close();
 		//call parent/student welcome screen
 		//Janelle's code end
+		studentParentActions(studentPtr, parentPtr, studentsVtr, parentVtr, signupOption);//call parent/student welcome screen
 	}
 	//Olivia's code end
 }
