@@ -2,6 +2,7 @@
 //School Management System 
 //Group Project - Name: JANIV
 //Group Members - Liv & Janelle
+//lol
 
 
 #include <iostream>
