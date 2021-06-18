@@ -705,6 +705,7 @@ void teachActions(struct Teacher* teacherPtr, vector<Teacher> teacherVtr,vector<
 }
 //Livs Code End
 
+
 //Janelle's code start
 void adminActions(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Student* studentPtr, struct Parent* parentPtr,
 	vector<Teacher> teacherVtr, vector<Admin> adminVtr, vector<Student> studentsVtr, vector<Parent> parentVtr,
@@ -803,6 +804,32 @@ void adminActions(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Stu
 }
 //Janelle's code end
 
+
+//ivs code start
+void parentAction(struct Student* studentPtr, struct Parent* parentPtr, vector<Student> studentsVtr, vector<Parent> parentVtr, int signupOption) { //Creating the parent option for bottom of output
+
+	int parentChoice = 0, recordChoice;
+	starLine(66);
+	cout << "\nEnter Number For Chosen Option" << endl;
+	cin >> parentChoice;
+
+	switch (parentChoice) {
+	case 1: //Accessing Student 1
+		cout << "\nviewing your childs reports" << endl;
+		break;
+	case 2: //Accessing Student 2
+		cout << "\nviewing exclusive school notices" << endl;
+		break;
+	case 3: //Accessing Student 3
+		cout << "\nsettings" << endl;
+		break;
+	case 6: //Accessing the Exit
+		cout << "\nExitting" << endl;
+		break;
+
+	}
+}
+
 //Livs Code
 void studentParentReportScreen(struct Student* studentPtr, struct Parent* parentPtr, vector<Student> studentsVtr, vector<Parent> parentVtr, int signupOption) { /*Parents Report Screen is so the parent is able to see the current reports
 									or notes on their child academically and behaviour wise */
@@ -819,6 +846,8 @@ void studentParentReportScreen(struct Student* studentPtr, struct Parent* parent
 	cout << "\nJacks Current Report"; //Will replace with the s->studentusername for the name
 	cout << "\n<-2. View Exclusive School Notices->" << endl;
 	cout << "\n<-3. Settings->" << endl;
+
+	parentAction(studentPtr, parentPtr, studentsVtr, parentVtr, signupOption);
 }
 
 //Livs Code
@@ -908,8 +937,8 @@ void writingToCSV(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Stu
 		teacherFile.close();
 
 		//call teacher ClassRoom screen
-		teachClassRecord(teacherPtr, teacherVtr, teacherEmpData, studentPtr, studentsVtr, emptyDataVtr);
-		teachActions(teacherPtr, teacherVtr, teacherEmpData, studentPtr, studentsVtr, emptyDataVtr);
+		teachClassRecord(teacherPtr, teacherVtr, teacherData, studentPtr, studentsVtr, studentDataVtr);
+		teachActions(teacherPtr, teacherVtr, teacherData, studentPtr, studentsVtr, studentDataVtr);
 		//Janelle's code end
 	}//livs code end
 
@@ -1007,6 +1036,7 @@ void login(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Student* s
 	parentVtr = readingParentCSV(parentVtr, parentData);
 	//cout << adminVtr.size() << endl;
 	//checking teacher vector for matching username
+	cout << teacherVtr.size() << endl;
 	for (i = 0; i < teacherVtr.size(); i++) {
 		if (teacherVtr[i].accountDetails.username == username) {
 			usernameFound = true;
