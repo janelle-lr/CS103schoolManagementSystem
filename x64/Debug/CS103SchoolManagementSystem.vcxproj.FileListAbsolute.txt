@@ -1,1 +1,2 @@
 D:\School Stuff\CS103\CS103schoolManagementSystem\x64\Debug\CS103SchoolManagementSystem.exe
+D:\School Stuff\CS103\CS103schoolManagementSystem -- Scott\x64\Debug\CS103SchoolManagementSystem.exe
