@@ -689,6 +689,71 @@ void adminActions(struct Admin* adminPtr, struct Student* studentPtr,
                 updateStudentCSV(studentVtr, studentDataVtr);
             }
             else if (recordChoice == 3) {
+		    //Scott Code
+		    
+		cout << "Please Enter The ID Of The Student You Want To Delete (6 Chars MAX)" << endl;
+		string str;
+		int id = 0;
+		    deletestudentchoice:
+		getline(cin, str);
+		if(!str.empty());
+		    {
+			 if (str.len() > 6)   {
+				 cout << "Value Needs To Be Less Than 6 Chars Long" << endl;
+				 goto deletestudentchoice;
+			 }
+			 id = stoi(str);
+			 
+			 if (id == 0 || id > 100) {
+				cout << "Please Enter A ID Between The Values Of 1 And 100" << endl;
+			 	goto deletestudentchoice;
+			 }
+			    
+			vector<string>storeStudentVtr = {};
+			vector<Student>test = {};
+			for (int i = 0; i < 2; i++) {
+				string filename = "Class" + (i + 1) + ".csv";
+				ifstream class(filename, ios::in);			
+				string line, currentStr;
+				class.open();
+
+				while (getline(class, line)) {
+					stringstream ss(line);
+
+				while (!ss.eof()) {
+					getline(ss, currentStr, ',');
+					studentDataVtr.push_back(currentStr);
+				}
+				test = storeStudentVtr(studentVtr, studentDataVtr);
+				vector<Student>test2 = {};
+				for (int j = 0; j < test.size(); j++) {
+					if (!test[j].id == id) {
+						test2.push_back(test[j]);
+					}
+				}
+				ofstream rewrite(filename, ofstream::out | ofstream::trunc);
+					
+				for (int j = 0; j < test2.size(); j++);
+				{
+					rewrite << test2[j].id << "," << test2[j].firstName << "," << test2[j].lastName << "," << test2[j].yearGroup << ","
+                    			<< test2[j].classNum << "," << test2[j].grade << "," << test2[j].parentDetails.firstName << "," << test2[j].parentDetails.lastName << ","
+                    			<< test2[j].parentDetails.email << "," << test2[j].parentDetails.gender << "," << test2[j].accountDetails.username
+                    			<< "," << test2[j].accountDetails.password << endl;
+				}
+				studentDataVtr.clear();
+			    }
+			    	class.close();
+				test.clear();
+
+			}
+			 
+		    } else {
+			  cout << "Please Enter A Value" << endl;
+			  goto deletestudentchoice;
+		    }
+		    
+		
+		
                 cout << "\n\t\t\t<-Delete Student Record->" << endl;
             }
             else if (recordChoice == 4) {
