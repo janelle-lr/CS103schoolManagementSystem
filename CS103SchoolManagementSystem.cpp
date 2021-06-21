@@ -9,6 +9,8 @@
 #include <sstream>
 #include <vector>
 #include <ctime>
+#include "csv.h"
+
 using namespace std;
 
 //Janelle's code
@@ -720,136 +722,91 @@ void adminActions(struct Admin* adminPtr, struct Student* studentPtr,
 void DeleteBastardChild() {
     cout << "\n\t\t\t<-Delete Student Record->" << endl;
     //Scott Code
-
-    cout << "Please Enter The ID Of The Student You Want To Delete (6 Chars MAX): ";
-    string str;
-    int id = 0;
-deletestudentchoice:
     cin.ignore();
-    getline(cin, str);
-    if (!str.empty())
-    {
-        if (str.length() > 6) {
+
+    cout << "Please Enter The ID Of The Class That The Student You Want To Delete Is In (6 Chars MAX): ";
+    string str1;
+    int classid = 0;
+classchoice:
+    getline(cin, str1);
+    if (!str1.empty()) {
+        if (str1.length() > 6) {
             cout << "Value Needs To Be Less Than 6 Chars Long" << endl;
-            goto deletestudentchoice;
+            goto classchoice;
         }
-        id = stoi(str);
+        classid = stoi(str1);
 
-        if (id == 0 || id > 100) {
-            cout << "Please Enter A ID Between The Values Of 1 And 100" << endl;
-            goto deletestudentchoice;
-        }
-        cout << "test1";
+        string filename = "class";
+        filename += to_string(classid);
+        filename += ".csv";
 
-        vector<Student>test = {};
-        for (int i = 0; i < 2; i++) {
-            cout << i;
+        ifstream test(filename);
 
-            string filename = "class";
-            filename += to_string(i + 1);
-            filename += ".csv";
-            cout << filename << endl;
-
-            ifstream classfile;
-            string currentStr, line;
-            classfile.open(filename, ios::in);
-            vector<vector<string>>input;
-
-            while (classfile) {
-                string s;
-                if (!getline(classfile, s)) break;
-
-                istringstream ss(s);
-                vector<string> record;
-                while (ss) {
-                    string s;
-                    if (!getline(ss, s, ',')) break;
-                    cout << s;
-                    record.push_back(s);
-                }
-                input.push_back(record);
-
-            }
-
-            //while (!classfile.eof()) {
-            //    while (getline(classfile, line)) {
-            //        stringstream ss(line);
-
-            //        while (!ss.eof()) {
-            //            getline(ss, currentStr, ',');
-            //            cout << currentStr << endl;
-            //            input.push_back(currentStr);//storing current data being read to studentDataVtr
-            //        }
-            //        test = storeStudentVtr(test, input);
-            //    }
-            //}
+        if (test.is_open()) {
+            test.close();
+            cout << "Please Enter The ID Of The Student You Want To Delete (6 Chars MAX): ";
+            string str;
+            int id = 0;
+        deletestudentchoice:
             
-            classfile.close();
+            getline(cin, str);
+            if (!str.empty())
+            {
+                if (str.length() > 6) {
+                    cout << "Value Needs To Be Less Than 6 Chars Long" << endl;
+                    goto deletestudentchoice;
+                }
+                id = stoi(str);
 
-            //string tmp1;
-            //int id;
-            //string firstName = "";
-            //string lastName = "";
-            //string tmp2;
-            //int yearGroup;
-            //string tmp3;
-            //int classNum;
-            //string tmp4;
-            //int grade;
-            //string parentDetailsfirstName = "";
-            //string parentDetailslastName = "";
-            //string parentDetailsemail = "";
-            //string parentDetailsgender = "";
-            //string accountDetailsusername = "";
-            //string accountDetailspassword = "";
+                if (id == 0 || id > 100) {
+                    cout << "Please Enter A ID Between The Values Of 1 And 100" << endl;
+                    goto deletestudentchoice;
+                }
 
-            //getline(classfile, tmp1, ',');        
-            ////id = stoi(tmp1);
-            //getline(classfile, firstName, ',');
-            //getline(classfile, lastName, ',');
-            //getline(classfile, tmp2, ',');
-            ////yearGroup = stoi(tmp2);
-            //getline(classfile, tmp3, ',');
-            //// = stoi(tmp3);
-            //getline(classfile, tmp4, ',');
-            ////grade = stoi(tmp4);
-            //getline(classfile, parentDetailsfirstName, ',');
-            //getline(classfile, parentDetailslastName, ',');
-            //getline(classfile, parentDetailsemail, ',');
-            //getline(classfile, parentDetailsgender, ',');
-            //getline(classfile, accountDetailsusername, ',');
-            //getline(classfile, accountDetailspassword);
+                vector<string>Students;
 
-            //cout << tmp1 << "," << firstName << "," << lastName << "," << tmp2 << "," << tmp3 << "," << tmp4 << "," << endl;
-
-            //Student stdnt = Student(id, firstName, lastName, yearGroup, classNum, grade);
-
-
-            //test.push_back(stdnt);
-        }
-        vector<Student>test2 = {};
-        for (int j = 0; j < test.size(); j++) {
-            if (!test[j].id == id) {
-                test2.push_back(test[j]);
+                io::CSVReader<12> in(filename);
+                int a, d, e;
+                int count = 0;
+                float f;
+                string b, c, g, h, i, j, k, l;
+                while (in.read_row(a, b, c, d, e, f, g, h, i, j, k, l)) {
+                    string Bastard = to_string(a) + "," + b + "," + c + "," + to_string(d) + "," + to_string(e) + "," + to_string(f) + "," + g + "," + h + "," + i + "," + j + "," + k + "," + l;
+                    if (id == a) {
+                        count++;
+                    }
+                    else {
+                        Students.push_back(Bastard);
+                    }
+                }
+                if (Students.size() > 0) {
+                    ofstream write(filename, ofstream::out | ofstream::trunc);
+                    write.clear();
+                    for (int i = 0; i < Students.size(); i++) {
+                        write << Students[i] << endl;
+                    }
+                }
+                if (count == 0) {
+                    cout << "No Students Were Found That Are Matching The ID In The Class You Gave. Please Try Again: ";
+                    goto classchoice;
+                }
+            }
+            else {
+                cout << "Please Enter A Value" << endl;
+                goto deletestudentchoice;
             }
         }
-        /*ofstream rewrite(filename, ofstream::out | ofstream::trunc);
-
-        for (int j = 0; j < test2.size(); j++)
-        {
-            rewrite << test2[j].id << "," << test2[j].firstName << "," << test2[j].lastName << "," << test2[j].yearGroup << ","
-                << test2[j].classNum << "," << test2[j].grade << "," << test2[j].parentDetails.firstName << "," << test2[j].parentDetails.lastName << ","
-                << test2[j].parentDetails.email << "," << test2[j].parentDetails.gender << "," << test2[j].accountDetails.username
-                << "," << test2[j].accountDetails.password << endl;
+        else {
+            cout << "There Are No Classes That Match The Value You Have Given. Please Try Again: ";
+            goto classchoice;
         }
-        classfile.close();
-        test.clear();*/
 
     }
     else {
         cout << "Please Enter A Value" << endl;
-        goto deletestudentchoice;
+        goto classchoice;
     }
+    
 
     //scott's code end
 }
