@@ -1,992 +1,1296 @@
-// CS103SchoolManagementSystem.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //School Management System 
 //Group Project - Name: JANIV
 //Group Members - Liv & Janelle
-
+//Last Edited by Janelle 21/06/21
 
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <sstream>
 #include <vector>
-
+#include <ctime>
 using namespace std;
 
-//Janelle's code start
+//Janelle's code
 struct Account {
-	string username;
-	string password;
+    string username;
+    string password;
 
-	//constructor
-	Account(string u = "", string p = "") {
-		username = u;
-		password = p;
-	}
+    //constructor
+    Account(string u = "", string p = "") {
+        username = u;
+        password = p;
+    }
 };
 
+//Liv's code
 struct Parent {
-	string firstName;
-	string lastName;
-	string gender;
-	string email;
-	int contactNum;
-	string childName;
-	int studentID;
-	Account accountDetails;
+    string firstName;
+    string lastName;
+    string gender;
+    string email;
+    int contactNum;
+    string childName;
+    int studentID;
+    Account accountDetails;
 };
 
+//Janelle's code
 struct Student {
-	int id;
-	string firstName;
-	string lastName;
-	int classNum;
-	int yearGroup;
-	Parent parentDetails;
-	Account accountDetails;
-	string grade;
+    int id;
+    string firstName;
+    string lastName;
+    int classNum;
+    int grade;
+    int yearGroup;
+    Parent parentDetails;
+    Account accountDetails;
 
-	//Constructor
-	Student(int i = 0, string fn = "", string ln = "", int y = 0, int c = 0) {
-		id = i;
-		firstName = fn;
-		lastName = ln;
-		yearGroup = y;
-		classNum = c;
-	}
+    //Constructor
+    Student(int i = 0, string fn = "", string ln = "", int c = 0, int g = 0, int y = 0) {
+        id = i;
+        firstName = fn;
+        lastName = ln;
+        classNum = c;
+        grade = g;
+        yearGroup = y;
+    }
 };
 
+//Janelle's code
 struct Admin {
-	string firstName;
-	string lastName;
-	string email;
-	Account accountDetails;
+    string firstName;
+    string lastName;
+    string email;
+    Account accountDetails;
 };
-//Janelle's code end
 
-//Olivia's code start
+//Liv's code
 struct Teacher {
-	string firstName;
-	string lastName;
-	string gender;
-	string email;
-	int contactNum;
-	int classNum;
-	int yearTeaching;
-	Account accountDetails;
+    string firstName;
+    string lastName;
+    string gender;
+    string email;
+    int contactNum;
+    int classNum;
+    int yearTeaching;
+    Account accountDetails;
 };
 
-
-struct Classroom {
-	string student;
-	string student1;
-	string student2;
-};
-//Olivia's code end
-
-//PROTOTYPES
-vector<Teacher> storingTeacherCSV(vector<Teacher> teacherVtr, vector<string> teacherEmpData);
-vector<Admin> storingAdminCSV(vector<Admin> adminVtr, vector<string> adminEmpData);
-vector<Student> storingStudentCSV(vector<Student> studentsVtr, vector<string> emptyData);
-vector<Parent> storingParentCSV(vector<Parent> parentVtr, vector<string> parentEmpData);
-vector<Teacher> readingTeacherCSV(vector<Teacher> teacherVtr, vector<string> teacherEmpData);
-vector<Admin> readingAdminCSV(vector<Admin> adminVtr, vector<string> adminEmpData);
-vector<Student> readingStudentCSV(vector<Student> studentsVtr, vector<string> emptyDataVtr);
-vector<Parent> readingAdminCSV(vector<Parent> parentVtr, vector<string> parentEmpData);
-
+//----------------------------------PROTOTYPES----------------------------------
 void starLine(int numOfStars);
 void schoolTitle();
 void introScreen();
-void addingStudentCSV(struct Student* studentPtr, vector<Student> studentsVtr, vector<string> emptyDataVtr);
-void displayRecords(struct Student* studentPtr, vector<Student> studentsVtr, int classRecordChoice);
-void displayReport(struct Student* studentPtr, vector<Student> studentsVtr, int displayRprtChoice);
-vector<Student> updatingStudentCSV(vector<Student> studentsVtr, vector<string> emptyDataVtr);
-void adminActions(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Student* studentPtr, struct Parent* parentPtr,
-	vector<Teacher> teacherVtr, vector<Admin> adminVtr, vector<Student> studentsVtr, vector<Parent> parentVtr,
-	vector<string> teacherEmpData, vector<string> adminEmpData, vector<string> emptyDataVtr, vector<string> parentEmpData);
-void studentParentReportScreen(struct Student* studentPtr, struct Parent* parentPtr, vector<Student> studentsVtr, vector<Parent> parentVtr, int signupOption);
-void studentParentNotices(struct Student* studentPtr, struct Parent* parentPtr, vector<Student> studentsVtr, vector<Parent> parentVtr, int signupOption);
-void studentParentActions(struct Student* studentPtr, struct Parent* parentPtr, vector<Student> studentsVtr, vector<Parent> parentVtr, int signupOption);
-void writingToCSV(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Student* studentPtr, struct Parent* parentPtr,
-	vector<Teacher> teacherVtr, vector<Admin> adminVtr, vector<Student> studentsVtr, vector<Parent> parentVtr,
-	vector<string> teacherEmpData, vector<string> adminEmpData, vector<string> emptyDataVtr, vector<string> parentEmpData, int signupOption);
+void signUp(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Student* studentPtr, struct Parent* parentPtr,
+    vector<Teacher> teacherVtr, vector<Admin> adminVtr, vector<Student> studentVtr, vector<Parent> parentVtr,
+    vector<string> teacherDataVtr, vector<string> adminDataVtr, vector<string> studentDataVtr, vector<string> parentDataVtr, int positionType);
 void login(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Student* studentPtr, struct Parent* parentPtr,
-	vector<Teacher> teacherVtr, vector<Admin> adminVtr, vector<Student> studentsVtr, vector<Parent> parentVtr,
-	vector<string> teacherEmpData, vector<string> adminEmpData, vector<string> emptyDataVtr, vector<string> parentEmpData);
-
+    vector<Teacher> teacherVtr, vector<Admin> adminVtr, vector<Student> studentVtr, vector<Parent> parentVtr,
+    vector<string> teacherDataVtr, vector<string> adminDataVtr, vector<string> studentDataVtr, vector<string> parentDataVtr);
+//----------------------------------TEACHER SECTION----------------------------------
+vector<Teacher> storeTeacherVtr(vector<Teacher> teacherVtr, vector<string> teacherDataVtr);
+vector<Teacher> readingTeacherCSV(vector<Teacher> teacherVtr, vector<string> teacherDataVtr);
+void teachActions(struct Teacher* teacherPtr, struct Student* studentPtr,
+    vector<Teacher> teacherVtr, vector<Student> studentVtr,
+    vector<string> teacherDataVtr, vector<string> studentDataVtr);
+//----------------------------------ADMIN SECTION----------------------------------
+vector<Admin> storeAdminVtr(vector<Admin> adminVtr, vector<string> adminDataVtr);
+vector<Admin> readingAdminCSV(vector<Admin> adminVtr, vector<string> adminDataVtr);
+void adminActions(struct Admin* adminPtr, struct Student* studentPtr,
+    vector<Admin> adminVtr, vector<Student> studentVtr,
+    vector<string> adminDataVtr, vector<string> studentDataVtr);
+//----------------------------------ADMIN/STUDENT SECTION----------------------------------
+void writingStudentCSV(struct Student* studentPtr, vector<Student> studentVtr, vector<string> studentDataVtr);
+vector<Student> storeStudentVtr(vector<Student>/* studentVtr*/, vector<string> /*studentDataVtr*/);
+vector<Student> readingStudentCSV(vector<Student> studentVtr, vector<string> studentDataVtr);
+vector<Student> updateStudentCSV(vector<Student> /*studentVtr*/, vector<string> /*studentDataVtr*/);
+void printStudentList(vector<Student>  studentVtr, vector<string> studentDataVtr);
+void printClassReports(vector<Student> studentVtr, vector<string> studentDataVtr, int classNo);
+//----------------------------------PARENT SECTION----------------------------------
+vector<Parent> storeParentVtr(vector<Parent> parentVtr, vector<string> parentDataVtr);
+vector<Parent> readingParentCSV(vector<Parent> parentVtr, vector<string> parentDataVtr);
+//----------------------------------STUDENT/PARENT SECTION----------------------------------
+void studentParentActions(struct Student* studentPtr, struct Parent* parentPtr,
+    vector<Student> studentVtr, vector<Parent> parentVtr,
+    vector<string> studentDataVtr, vector<string> parentDataVtr, int id, int signupOption);
+void studentParentNotices(struct Student* studentPtr, struct Parent* parentPtr,
+    vector<Student> studentVtr, vector<Parent> parentVtr,
+    vector<string> studentDataVtr, vector<string> parentDataVtr, int id, int signupOption);
+void studentParentReportScreen(struct Student* studentPtr, struct Parent* parentPtr,
+    vector<Student> studentVtr, vector<Parent> parentVtr, vector<string> studentDataVtr,
+    vector<string> parentDataVtr, int id, int signupOption);
+void DeleteBastardChild();
 
 int main()
 {
-	struct Student s;
-	struct Student* studentPtr = &s;
-	struct Admin a;
-	struct Admin* adminPtr = &a;
-	//Olivia's code start
-	struct Teacher t;
-	struct Teacher* teacherPtr = &t;
-	struct Parent p;
-	struct Parent* parentPtr = &p;
-	//Olivia's code end
+    //Janelle's code start
+    struct Teacher teacherStruct;
+    struct Teacher* teacherPtr = &teacherStruct;
+    vector<Teacher> teacherVtr;
+    vector<string> teacherDataVtr;
 
-	vector<Student> studentsVtr;
-	vector<string> emptyDataVtr;
-	vector<Admin> adminVtr;
-	vector<string> adminEmpData;
-	vector<Teacher> teacherVtr;
-	vector<string> teacherEmpData;
-	vector<Parent> parentVtr;
-	vector<string> parentEmpData;
+    struct Admin adminStruct;
+    struct Admin* adminPtr = &adminStruct;
+    vector<Admin> adminVtr;
+    vector<string> adminDataVtr;
 
-	int menuOption, signupOption;
-	bool validInput = false;
+    struct Student studentStruct;
+    struct Student* studentPtr = &studentStruct;
+    vector<Student> studentVtr;
+    vector<string> studentDataVtr;
+    //Janelle's code end
 
-	schoolTitle();//calling the school name
-	introScreen();
+    // Liv's code
+    struct Parent parentStruct;
+    struct Parent* parentPtr = &parentStruct;
+    vector<Parent> parentVtr;
+    vector<string> parentDataVtr;
 
-	cout << "1. Sign Up\n2. Login\n3. End" << endl;
-	cout << "Enter your chosen action : ";
-	cin >> menuOption;
+    //Declarations
+    int menuOption, positionType;
+    bool validInput = false;
 
-	while (validInput == false) {
-		switch (menuOption) {
-		case 1:
-			cout << "\nSign Up as" << endl;
-			starLine(20);
-			cout << "1. Teacher\n2. Admin\n3. Student\n4. Parent" << endl;
-			cout << "Enter your chosen action : ";
-			cin >> signupOption;
-			if (signupOption > 4) {
-				cout << "Error : Invalid input" << endl;
-			}
-			else {
-				validInput = true;
-				writingToCSV(teacherPtr, adminPtr, studentPtr, parentPtr, teacherVtr, adminVtr, studentsVtr, parentVtr, teacherEmpData, adminEmpData, emptyDataVtr, parentEmpData, signupOption);				break;
-			}
-		case 2:
-			cout << "\nLogin" << endl;
-			starLine(20);
-			login(teacherPtr, adminPtr, studentPtr, parentPtr, teacherVtr, adminVtr, studentsVtr, parentVtr, teacherEmpData, adminEmpData, emptyDataVtr, parentEmpData);
-			break;
-		case 3:
-			//Terminate program
-			//updatingStudentCSV( studentsVtr, emptyDataVtr);
-			//storingStudentCSV(studentsVtr, emptyDataVtr);
-			//cout << studentsVtr.size();
-			cout << "Program Terminated" << endl;
-			return 0;
-		}
-	}
+    //Janelle's code start
+    while (validInput == false) {
+        schoolTitle();//calling the school name
+        introScreen();
+        cout << "1. Sign Up\n2. Login\n3. End" << endl;
+        cout << "Enter number for chosen option : ";
+        cin >> menuOption;
+
+        switch (menuOption) {
+        case 1:
+            //sign up
+            cout << "\nSign Up as" << endl;
+            cout << "1. Teacher\n2. Admin\n3. Parent\n\nTo return press 4\n" << endl;
+            cout << "Enter number for chosen option : ";
+            cin >> positionType;
+            if (positionType > 4) {
+                cout << "Error : Invalid input" << endl;
+            }
+            else if (positionType == 4) {
+                cout << endl;
+                break;
+            }
+            else {
+                validInput = true;
+                signUp(teacherPtr, adminPtr, studentPtr, parentPtr, teacherVtr, adminVtr, studentVtr, parentVtr, teacherDataVtr, adminDataVtr, studentDataVtr, parentDataVtr, positionType);
+            }
+            break;
+        case 2:
+            //login
+            validInput = true;
+            login(teacherPtr, adminPtr, studentPtr, parentPtr, teacherVtr, adminVtr, studentVtr, parentVtr, teacherDataVtr, adminDataVtr, studentDataVtr, parentDataVtr);
+            break;
+        case 3:
+            //terminate program
+            cout << "\nBye Bye\nProgram ended" << endl;
+            validInput = true;
+            break;
+        default:
+            cout << "\nInvalid Input : Please enter a number from 1 to 3" << endl;
+        }
+    }
+
+    return 0;
+    //Janelle's code end
 }
 
-//Janelle's code start
-//storing inputted teacher details into vector
-vector<Teacher> storingTeacherCSV(vector<Teacher> teacherVtr, vector<string> teacherEmpData) {
-	Teacher tv;
-
-	tv.firstName = teacherEmpData[0];
-	tv.lastName = teacherEmpData[1];
-	tv.gender = teacherEmpData[2];
-	tv.email = teacherEmpData[3];
-	tv.contactNum = stoi(teacherEmpData[4]);
-	tv.classNum = stoi(teacherEmpData[5]);
-	tv.yearTeaching = stoi(teacherEmpData[6]);
-	tv.accountDetails.username = teacherEmpData[7];
-	tv.accountDetails.password = teacherEmpData[8];
-
-	teacherVtr.push_back(tv);
-
-	return teacherVtr;
-}
-
-//storing inputted admin details into vector
-vector<Admin> storingAdminCSV(vector<Admin> adminVtr, vector<string> adminEmpData) {
-	Admin av;
-
-	av.firstName = adminEmpData[0];
-	av.lastName = adminEmpData[1];
-	av.email = adminEmpData[2];
-	av.accountDetails.username = adminEmpData[3];
-	av.accountDetails.password = adminEmpData[4];
-
-	adminVtr.push_back(av);
-
-	return adminVtr;
-}
-
-//storing inputted student details into vector
-vector<Student> storingStudentCSV(vector<Student> studentsVtr, vector<string> emptyDataVtr) {
-	Student sv;
-
-	sv.id = stoi(emptyDataVtr[0]);//error
-	sv.firstName = emptyDataVtr[1];
-	sv.lastName = emptyDataVtr[2];
-	sv.yearGroup = stoi(emptyDataVtr[3]);
-	sv.classNum = stoi(emptyDataVtr[4]);
-	sv.parentDetails.firstName = emptyDataVtr[5];
-	sv.parentDetails.lastName = emptyDataVtr[6];
-	sv.parentDetails.email = emptyDataVtr[7];
-	sv.parentDetails.gender = emptyDataVtr[8];
-	sv.accountDetails.username = emptyDataVtr[9];
-	sv.accountDetails.password = emptyDataVtr[10];
-
-	studentsVtr.push_back(sv);
-	//cout << "\ni am in the storingStudentCSV vector function" << endl;
-	return studentsVtr;
-}
-
-//storing inputted teacher details into vector
-vector<Parent> storingParentCSV(vector<Parent> parentVtr, vector<string> parentEmpData) {
-	Parent pv;
-
-	pv.firstName = parentEmpData[0];
-	pv.lastName = parentEmpData[1];
-	pv.gender = parentEmpData[2];
-	pv.email = parentEmpData[3];
-	pv.contactNum = stoi(parentEmpData[4]);
-	pv.childName = parentEmpData[5];
-	pv.studentID = stoi(parentEmpData[6]);
-	pv.accountDetails.username = parentEmpData[7];
-	pv.accountDetails.password = parentEmpData[8];
-
-	parentVtr.push_back(pv);
-
-	return parentVtr;
-}
-
-vector<Teacher> readingTeacherCSV(vector<Teacher> teacherVtr, vector<string> teacherEmpData) {
-	ifstream readingTeacher;
-	string line, currentStr;
-
-	readingTeacher.open("teachers.csv", ios::in);
-	while (getline(readingTeacher, line)) {
-		stringstream linestream(line);
-
-		while (!linestream.eof()) {
-			getline(linestream, currentStr, ',');
-			teacherEmpData.push_back(currentStr);
-		}
-		teacherVtr = storingTeacherCSV(teacherVtr, teacherEmpData);//storing into vector
-		teacherEmpData.clear();
-	}
-
-	readingTeacher.close();
-	return teacherVtr;
-}
-
-vector<Admin> readingAdminCSV(vector<Admin> adminVtr, vector<string> adminEmpData) {
-	ifstream readingAdmin;
-	string line, currentStr;
-
-	readingAdmin.open("admins.csv", ios::in);
-	while (getline(readingAdmin, line)) {
-		stringstream linestream(line);
-
-		while (!linestream.eof()) {
-			getline(linestream, currentStr, ',');
-			adminEmpData.push_back(currentStr);
-		}
-		adminVtr = storingAdminCSV(adminVtr, adminEmpData);//storing into vector
-		adminEmpData.clear();
-	}
-
-	readingAdmin.close();
-	return adminVtr;
-}
-
-vector<Student> readingStudentCSV(vector<Student> studentsVtr, vector<string> emptyDataVtr) {
-	ifstream readingStudentsC1;
-	string line, currentStr;
-
-	//cout << "\ni am in readingStudentCSV vector function" << endl;
-
-	readingStudentsC1.open("class1.csv", ios::in);
-	while (getline(readingStudentsC1, line)) {
-		stringstream linestream(line);
-
-		while (!linestream.eof()) {
-			getline(linestream, currentStr, ',');
-			emptyDataVtr.push_back(currentStr);
-		}
-		studentsVtr = storingStudentCSV(studentsVtr, emptyDataVtr);//storing into vector
-		emptyDataVtr.clear();
-		//cout << "\ni am going through class1 file" << endl;
-	}
-	readingStudentsC1.close();
-
-	ifstream readingStudentsC2;
-	string line2, currentStr2;
-
-	readingStudentsC2.open("class2.csv", ios::in);
-	while (getline(readingStudentsC2, line2)) {
-		stringstream linestream(line2);
-
-		while (!linestream.eof()) {
-			getline(linestream, currentStr2, ',');
-			emptyDataVtr.push_back(currentStr2);
-		}
-		studentsVtr = storingStudentCSV(studentsVtr, emptyDataVtr);//storing into vector
-		emptyDataVtr.clear();
-		//cout << "\ni am going through class2 file" << endl;
-	}
-	readingStudentsC2.close();
-
-	return studentsVtr;
-}
-
-vector<Parent> readingParentCSV(vector<Parent> parentVtr, vector<string> parentEmpData) {
-	ifstream readingParent;
-	string line, currentStr;
-
-	readingParent.open("parents.csv", ios::in);
-	while (getline(readingParent, line)) {
-		stringstream linestream(line);
-
-		while (!linestream.eof()) {
-			getline(linestream, currentStr, ',');
-			parentEmpData.push_back(currentStr);
-		}
-		parentVtr = storingParentCSV(parentVtr, parentEmpData);//storing into vector
-		parentEmpData.clear();
-	}
-
-	readingParent.close();
-	return parentVtr;
-}
-//Janelle's code end
-
-//Olivia's code start
+//Liv's code
 void starLine(int numOfStars) { // Output for Star Lines
-	int i;
-	for (i = 0; i < numOfStars; i++) {
-		cout << "*";
-	}
-	cout << endl;
+    int i;
+    for (i = 0; i < numOfStars; i++) {
+        cout << "*";
+    }
+    cout << endl;
 }
 
+//Liv's code
 void schoolTitle() {
-	cout << "\n\t\t\tEVABEE SCHOOL" << endl;//Title output
-	starLine(66);
+    //system("CLS");// clears console
+    cout << "\n\t\t\tEVABEE SCHOOL" << endl;//Title output
+    starLine(66);
 }
 
+//Liv's code
 void introScreen() {
-	//Contact Output
-	cout << "<-Contact->" << endl;
-	cout << "Phone: 08-947-3759" << endl;
-	cout << "Email: Evabee.school@gmail.co.nz" << endl;
-	cout << "Address: 678 Lansley Road, 8908, Wellington" << endl;
-	starLine(66);
-	//Events Output
-	cout << "<-Upcoming Events->" << endl;
-	cout << "1/06/2021: Pride Month(SchoolLunch)" << endl;
-	cout << "10/06/2021: Sports Day" << endl;
-	cout << "15/06/2021: Sports Day Prize Giving" << endl;
-	cout << "22/06/2021: Big Assembly" << endl;
-	starLine(66);
-	//Term Output
-	cout << "<-Term Dates->" << endl;
-	cout << "1/02/2021: Start Of Term 1" << endl;
-	cout << "1/05/2021: Start Of Term 2" << endl;
-	cout << "1/08/2021: Start Of Term 3" << endl;
-	cout << "1/10/2021: Start Of Term 4" << endl;
-	starLine(66);
-}
-//Olivia's code end
-
-//Janelle's code start
-void addingStudentCSV(struct Student* studentPtr, vector<Student> studentsVtr, vector<string> emptyDataVtr) {
-	int id = 100;
-	cout << "\nEnter student details" << endl;
-	cout << "First name : ";
-	cin >> studentPtr->firstName;
-	cout << "Last name : ";
-	cin >> studentPtr->lastName;
-	cout << "Year group : ";
-	cin >> studentPtr->yearGroup;
-	cout << "Class Number : ";
-	cin >> studentPtr->classNum;
-	cout << "Parent/guardian first name : ";
-	cin >> studentPtr->parentDetails.firstName;
-	cout << "Parent/guardian last name : ";
-	cin >> studentPtr->parentDetails.lastName;
-	cout << "Parent/guardian email : ";
-	cin >> studentPtr->parentDetails.email;
-	cout << "Parent/guardian gender : ";
-	cin >> studentPtr->parentDetails.gender;
-	cout << "Username : ";
-	cin >> studentPtr->accountDetails.username;
-	cout << "Password : ";
-	cin >> studentPtr->accountDetails.password;
-	studentPtr->id = id++;
-
-	if (studentPtr->classNum == 1) {
-		ofstream class1File;
-		//opening csv file
-		class1File.open("class1.csv", ios::app);
-		class1File << studentPtr->id << "," << studentPtr->firstName << "," << studentPtr->lastName << "," << studentPtr->yearGroup << ","
-			<< studentPtr->classNum << "," << studentPtr->parentDetails.firstName << "," << studentPtr->parentDetails.lastName << ","
-			<< studentPtr->parentDetails.email << "," << studentPtr->parentDetails.gender << "," << studentPtr->accountDetails.username
-			<< "," << studentPtr->accountDetails.password << endl;//writing to csv file
-
-		class1File.close();
-	}
-	else if (studentPtr->classNum == 2) {
-		ofstream class2File;
-		//opening csv file
-		class2File.open("class2.csv", ios::app);
-		class2File << studentPtr->id << "," << studentPtr->firstName << "," << studentPtr->lastName << "," << studentPtr->yearGroup << ","
-			<< studentPtr->classNum << "," << studentPtr->parentDetails.firstName << "," << studentPtr->parentDetails.lastName << ","
-			<< studentPtr->parentDetails.email << "," << studentPtr->parentDetails.gender << "," << studentPtr->accountDetails.username
-			<< "," << studentPtr->accountDetails.password << endl;//writing to csv file
-
-		class2File.close();
-	}
-	readingStudentCSV(studentsVtr, emptyDataVtr);
-}
-//Janelle's code end
-
-//display student records
-void displayRecords(struct Student* studentPtr, vector<Student> studentsVtr, int classRecordChoice) {
-	int i;
-
-	//displays the old name of the student and makes vector size 2;
-	for (i = 0; i < studentsVtr.size(); i++) { //goes through student vector and will only print the student record if classNum = 1
-		if (studentsVtr[i].classNum == classRecordChoice) {
-			cout << "\nID : " << studentsVtr[i].id << "\nFull Name : " << studentsVtr[i].firstName << " " << studentsVtr[i].lastName
-				<< "\nYear Group : " << studentsVtr[i].yearGroup << "\nClass Number : " << studentsVtr[i].classNum
-				<< "\nParent/Guardian Full Name : " << studentsVtr[i].parentDetails.firstName << " " << studentsVtr[i].parentDetails.lastName
-				<< "\nParent/Guardian Email : " << studentsVtr[i].parentDetails.email << "\nParent/Guadian Gender : " << studentsVtr[i].parentDetails.gender
-				<< "\nUsername : " << studentsVtr[i].accountDetails.username << "\nPassword : " << studentsVtr[i].accountDetails.password << endl;
-		}
-	}
+    //Contact Output
+    cout << "<-Contact->" << endl;
+    cout << "Phone: 08-947-3759" << endl;
+    cout << "Email: Evabee.school@gmail.co.nz" << endl;
+    cout << "Address: 678 Lansley Road, 8908, Wellington" << endl;
+    starLine(66);
+    //Events Output
+    cout << "<-Upcoming Events->" << endl;
+    cout << "1/06/2021: Pride Month(SchoolLunch)" << endl;
+    cout << "10/06/2021: Sports Day" << endl;
+    cout << "15/06/2021: Sports Day Prize Giving" << endl;
+    cout << "22/06/2021: Big Assembly" << endl;
+    starLine(66);
+    //Term Output
+    cout << "<-Term Dates->" << endl;
+    cout << "1/02/2021: Start Of Term 1" << endl;
+    cout << "1/05/2021: Start Of Term 2" << endl;
+    cout << "1/08/2021: Start Of Term 3" << endl;
+    cout << "1/10/2021: Start Of Term 4" << endl;
+    starLine(66);
 }
 
-void displayReport(struct Student* studentPtr, vector<Student> studentsVtr, int displayRprtChoice) {
-	int i;
+void signUp(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Student* studentPtr, struct Parent* parentPtr,
+    vector<Teacher> teacherVtr, vector<Admin> adminVtr, vector<Student> studentVtr, vector<Parent> parentVtr,
+    vector<string> teacherDataVtr, vector<string> adminDataVtr, vector<string> studentDataVtr, vector<string> parentDataVtr, int positionType) {
 
-	for (i = 0; i < studentsVtr.size(); i++) {
-		starLine(20);
-		if (studentsVtr[i].classNum == displayRprtChoice) {
-			cout << "\nID : " << studentsVtr[i].id << "\nFull Name : " << studentsVtr[i].firstName << " " << studentsVtr[i].lastName
-				<< "\nYear Group : " << studentsVtr[i].yearGroup << "\nClass Number : " << studentsVtr[i].classNum << endl;
-		}
-	}
+    bool studentFound = false;
+    int id = 0;
+    string username;
+
+    schoolTitle();
+
+    //Liv's code start
+    //teacher sign up
+    if (positionType == 1) {
+        //Entering Signup information for teacher information output
+        cout << "\n\t\t\t<-Teacher Signup->" << endl;
+        cout << "\nEnter Teacher details" << endl;
+        cout << "First Name : ";
+        cin >> teacherPtr->firstName;
+        cout << "Last Name : ";
+        cin >> teacherPtr->lastName;
+        cout << "Gender : ";
+        cin >> teacherPtr->gender;
+        cout << "Email : ";
+        cin >> teacherPtr->email;
+        cout << "Contact Number : ";
+        cin >> teacherPtr->contactNum;
+        cout << "Classroom Number : ";
+        cin >> teacherPtr->classNum;
+        cout << "Year Group You're Teaching : ";
+        cin >> teacherPtr->yearTeaching;
+        cout << "Username : ";
+        cin >> teacherPtr->accountDetails.username;
+        cout << "Password : ";
+        cin >> teacherPtr->accountDetails.password;
+
+        //Janelle's code start
+        ofstream teacherFile;
+        teacherFile.open("teacher.csv", ios::app);
+
+        teacherFile << teacherPtr->firstName << "," << teacherPtr->lastName << "," << teacherPtr->gender << "," << teacherPtr->email << ","
+            << teacherPtr->contactNum << "," << teacherPtr->classNum << "," << teacherPtr->yearTeaching << "," << teacherPtr->accountDetails.username
+            << "," << teacherPtr->accountDetails.password << endl; //writing user input into csv file
+        teacherFile.close();
+
+        readingTeacherCSV(teacherVtr, teacherDataVtr); //read from teacher csv file and write into vector
+        //Janelle's code end
+        //call teacher ClassRoom screen
+        teachActions(teacherPtr, studentPtr, teacherVtr, studentVtr, teacherDataVtr, studentDataVtr);
+    }//Liv's code end
+    //Janelle's code start
+    //admin sign up
+    else if (positionType == 2) {
+        cout << "\n\t\t\t<-Admin Signup->" << endl;
+        cout << "\nEnter admin details" << endl;
+        cout << "First name : ";
+        cin >> adminPtr->firstName;
+        cout << "Last name : ";
+        cin >> adminPtr->lastName;
+        cout << "Email : ";
+        cin >> adminPtr->email;
+        cout << "Username : ";
+        cin >> adminPtr->accountDetails.username;
+        cout << "Password : ";
+        cin >> adminPtr->accountDetails.password;
+        //opening csv file
+        ofstream adminFile;
+        adminFile.open("admin.csv", ios::app);
+
+        adminFile << adminPtr->firstName << "," << adminPtr->lastName << "," << adminPtr->email << "," << adminPtr->accountDetails.username << "," << adminPtr->accountDetails.password << endl; //writing user input into csv file
+        adminFile.close();
+        readingAdminCSV(adminVtr, adminDataVtr);
+        adminActions(adminPtr, studentPtr, adminVtr, studentVtr, adminDataVtr, studentDataVtr);
+    }//Janelle's code end
+    //Liv's code start
+    //parent sign up
+    else {
+        cout << "\n\t\t\t<-Parent Signup->" << endl;
+        //Entering Signup information for parent information output
+        cout << "\nEnter Parent Details" << endl;
+        cout << "First Name: ";
+        cin >> parentPtr->firstName;
+        cout << "Last Name: ";
+        cin >> parentPtr->lastName;
+        cout << "Gender: ";
+        cin >> parentPtr->gender;
+        cout << "Email: ";
+        cin >> parentPtr->email;
+        cout << "Contact Number: ";
+        cin >> parentPtr->contactNum;
+        cout << "Child's Last Name : ";
+        cin >> parentPtr->childName;
+        cout << "Child's Student ID: ";
+        cin >> parentPtr->studentID;
+        //Liv's code end
+        //Janelle's code start
+        id = parentPtr->studentID;
+
+        //check to see if student exists
+        studentVtr = readingStudentCSV(studentVtr, studentDataVtr);
+
+        for (int i = 0; i < studentVtr.size(); i++) {
+            if (studentVtr[i].id == id) {
+                studentFound == true;
+                //Liv's code start
+                cout << "Username: ";
+                cin >> parentPtr->accountDetails.username;
+                cout << "Password: ";
+                cin >> parentPtr->accountDetails.password;
+                //Liv's code end
+
+                ofstream parentFile;
+                parentFile.open("parent.csv", ios::app);
+
+                parentFile << parentPtr->firstName << "," << parentPtr->lastName << "," << parentPtr->gender << "," << parentPtr->email << ","
+                    << parentPtr->contactNum << "," << parentPtr->childName << "," << parentPtr->studentID << "," << parentPtr->accountDetails.username
+                    << "," << parentPtr->accountDetails.password << endl; //writing user input into csv file
+                parentFile.close();
+                readingParentCSV(parentVtr, parentDataVtr);
+
+                //call parent/student welcome screen
+                studentParentActions(studentPtr, parentPtr, studentVtr, parentVtr, studentDataVtr, parentDataVtr, id, 4); //Liv's code
+                break;
+            }
+            else {
+                studentFound == false;
+            }
+        }
+        if (studentFound == false) {
+            cout << "\nError : The student ID you entered does not exist. Please try again later." << endl;
+            //message prints fix this. 
+        }
+    }
+    //Janelle's code end
 }
 
-//Janelle's code start
-vector<Student> updatingStudentCSV(vector<Student> studentsVtr, vector<string> emptyDataVtr) {
-	string firstName, lastName, guardianFirstName, guardianLastName, guardianEmail, guardianGender, username, password, newFirstName, newLastName, newGuardianFirstName, newGuardianLastName, newGuardianEmail, newGuardianGender, newUsername, newPassword;
-	char choice;
-	bool found = false;
-	int id, editChoice, yearGroup, classNumber, newYearGroup, newClassNumber, i, k;
+//Janelle's code
+void login(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Student* studentPtr, struct Parent* parentPtr,
+    vector<Teacher> teacherVtr, vector<Admin> adminVtr, vector<Student> studentVtr, vector<Parent> parentVtr,
+    vector<string> teacherDataVtr, vector<string> adminDataVtr, vector<string> studentDataVtr, vector<string> parentDataVtr) {
+    int vectorSize;
+    string username, password;
+    char choice;
+    bool usernameFound = false, passwordFound = false;
+    int passwordAttempt = 0, i, j, k, l, m, n, p, q, id = 0;
+    string positionType;
 
-	studentsVtr = readingStudentCSV(studentsVtr, emptyDataVtr);
-	//cout << "studentsVtr.size() = " << studentsVtr.size() << endl;
+    schoolTitle();
+    cout << "\n\t\t\t<-Login->" << endl;
 
-	cout << "\nEnter id of student record you would like to edit : ";
-	cin >> id;
+    cout << "\nEnter username : ";
+    cin >> username;
 
-	for (i = 0; i < studentsVtr.size(); i++) {
-		if (studentsVtr[i].id == id) {
-			found = true;
-			cout << "\nStudent record found : " << studentsVtr[i].firstName << " " << studentsVtr[i].lastName << endl;
-			cout << "\nWhat would you like to edit?\n1. First name\n2. Last name\n3. Year group\n4. Class Number\n5. Parent/guardian first name\n6. Parent/guardian last name\n7. Parent/guardian email\n8. Parent/guardian gender\n9. Username\n10. Password" << endl;
-			cout << "Enter your chosen action : ";
-			cin >> editChoice;
-			schoolTitle();
-			if (editChoice == 1) {
-				//enter new first name for found student
-				cout << "\nEnter new first name for " << studentsVtr[i].firstName << " " << studentsVtr[i].lastName << "(ID " << studentsVtr[i].id << ") : ";
-				cin >> newFirstName;
-				studentsVtr[i].firstName = newFirstName;
-			}
-			else if (editChoice == 2) {
-				//enter new last name for found student
-				cout << "\nEnter updated last name for " << studentsVtr[i].firstName << " " << studentsVtr[i].lastName << "(ID " << studentsVtr[i].id << ") : ";
-				cin >> newLastName;
-				studentsVtr[i].lastName = newLastName;
-			}
-			else if (editChoice == 3) {
-				//enter new year group for found student
-				cout << "\nEnter updated year group for " << studentsVtr[i].firstName << " " << studentsVtr[i].lastName << "(ID " << studentsVtr[i].id << ") : ";
-				cin >> newYearGroup;
-				studentsVtr[i].yearGroup = newYearGroup;
-			}
-			else if (editChoice == 4) {
-				//enter new class for found student
-				cout << "\nEnter updated class number group for " << studentsVtr[i].firstName << " " << studentsVtr[i].lastName << "(ID " << studentsVtr[i].id << ") : ";
-				cin >> newClassNumber;
-				studentsVtr[i].classNum = newClassNumber;
-			}
-			else if (editChoice == 5) {
-				//enter new parent first name for found student
-				cout << "\nEnter updated parent/guardian first name for " << studentsVtr[i].firstName << " " << studentsVtr[i].lastName << "(ID " << studentsVtr[i].id << ") : ";
-				cin >> newGuardianFirstName;
-				studentsVtr[i].parentDetails.firstName = newGuardianFirstName;
-			}
-			else if (editChoice == 6) {
-				//enter new parent last name for found student
-				cout << "\nEnter updated parent/guardian last name for " << studentsVtr[i].firstName << " " << studentsVtr[i].lastName << "(ID " << studentsVtr[i].id << ") : ";
-				cin >> newGuardianLastName;
-				studentsVtr[i].parentDetails.lastName = newGuardianLastName;
-			}
-			else if (editChoice == 7) {
-				//enter new parent email for found student
-				cout << "\nEnter updated parent/guardian email for " << studentsVtr[i].firstName << " " << studentsVtr[i].lastName << "(ID " << studentsVtr[i].id << ") : ";
-				cin >> newGuardianEmail;
-				studentsVtr[i].parentDetails.email = newGuardianEmail;
-			}
-			else if (editChoice == 8) {
-				//enter new parent gender for found student
-				cout << "\nEnter updated parent/guardian email for " << studentsVtr[i].firstName << " " << studentsVtr[i].lastName << "(ID " << studentsVtr[i].id << ") : ";
-				cin >> newGuardianGender;
-				studentsVtr[i].parentDetails.gender = newGuardianGender;
-			}
-			else if (editChoice == 9) {
-				//enter new username for found student
-				cout << "\nEnter updated username for " << studentsVtr[i].firstName << " " << studentsVtr[i].lastName << "(ID " << studentsVtr[i].id << ") : ";
-				cin >> newUsername;
-				studentsVtr[i].accountDetails.username = newUsername;
-			}
-			else if (editChoice == 10) {
-				//enter new password for found student
-				cout << "\nEnter updated password for " << studentsVtr[i].firstName << " " << studentsVtr[i].lastName << "(ID " << studentsVtr[i].id << ") : ";
-				cin >> newPassword;
-				studentsVtr[i].accountDetails.password = newPassword;
-			}
-			else {
-				cout << "\nInvalid input : Please enter a number from 1 to 10" << endl;
-			}
-			break;
-		}
-		else {
-			found = false;
-		}
-	}
+    //cout << adminVtr.size() << endl;
 
-	if (!found) {
-		cout << "no students found" << endl;
-	}
-	else if (found == true) {
-		//updating students csv to account for changes made
-		cout << "Student record succesfully updated" << endl;
-		for (k = 0; k < studentsVtr.size(); k++) {
-			if (studentsVtr[k].classNum == 1) {
-				ofstream updateCSVClass1("class1.csv", ios::out);
-				updateCSVClass1 << studentsVtr[i].id << "," << studentsVtr[i].firstName << "," << studentsVtr[i].lastName << "," << studentsVtr[i].yearGroup
-					<< "," << studentsVtr[i].classNum << "," << studentsVtr[i].parentDetails.firstName << "," << studentsVtr[i].parentDetails.lastName
-					<< "," << studentsVtr[i].parentDetails.email << "," << studentsVtr[i].parentDetails.gender << "," << studentsVtr[i].accountDetails.username
-					<< "," << studentsVtr[i].accountDetails.password << endl;
-				updateCSVClass1.close();
-			}
-			else if (studentsVtr[k].classNum == 2) {
-				ofstream updateCSVClass2("class2.csv", ios::out);
-				updateCSVClass2 << studentsVtr[i].id << "," << studentsVtr[i].firstName << "," << studentsVtr[i].lastName << "," << studentsVtr[i].yearGroup
-					<< "," << studentsVtr[i].classNum << "," << studentsVtr[i].parentDetails.firstName << "," << studentsVtr[i].parentDetails.lastName
-					<< "," << studentsVtr[i].parentDetails.email << "," << studentsVtr[i].parentDetails.gender << "," << studentsVtr[i].accountDetails.username
-					<< "," << studentsVtr[i].accountDetails.password << endl;
-				updateCSVClass2.close();
-			}
-		}
-	}
-	readingStudentCSV(studentsVtr, emptyDataVtr);
-	//cout << "Updated student file\n" << endl;
-	//cout << "\nstudentsVtr.size() = " << studentsVtr.size() << endl;
-	//for (int m = 0; m < studentsVtr.size(); m++) {
-	//	cout << "Updated student details" << endl;
-	//	cout << studentsVtr[m].id << "," << studentsVtr[m].firstName << "," << studentsVtr[m].lastName << "," << studentsVtr[m].yearGroup
-	//		<< "," << studentsVtr[m].classNum << "," << studentsVtr[m].parentDetails.firstName << "," << studentsVtr[m].parentDetails.lastName
-	//		<< "," << studentsVtr[m].parentDetails.email << "," << studentsVtr[m].parentDetails.gender << "," << studentsVtr[m].accountDetails.username
-	//		<< "," << studentsVtr[m].accountDetails.password << endl;
-	//}
-	return studentsVtr;
-}
-//Janelle's code end
+    //checking teacher vector for matching username
+    teacherVtr = readingTeacherCSV(teacherVtr, teacherDataVtr);
+    for (i = 0; i < teacherVtr.size(); i++) {
+        if (teacherVtr[i].accountDetails.username == username) {
+            usernameFound = true;
+            //vectorSize = adminVtr.size();
+            positionType = "teacher";
+            break;
+        }
+    }
 
-//Janelle's code start
-void adminActions(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Student* studentPtr, struct Parent* parentPtr,
-	vector<Teacher> teacherVtr, vector<Admin> adminVtr, vector<Student> studentsVtr, vector<Parent> parentVtr,
-	vector<string> teacherEmpData, vector<string> adminEmpData, vector<string> emptyDataVtr, vector<string> parentEmpData) {
+    //checking admin vector for matching username
+    adminVtr = readingAdminCSV(adminVtr, adminDataVtr);
+    for (j = 0; j < adminVtr.size(); j++) {
+        if (adminVtr[j].accountDetails.username == username) {
+            usernameFound = true;
+            //vectorSize = adminVtr.size();
+            positionType = "admin";
+            break;
+        }
+    }
 
-	int choice = 0, recordChoice, studRecChoice, rprtChoice, classRecordChoice, displayRprtChoice, editRprtChoice, i, j;
-	schoolTitle();
-	cout << "Signed in as admin" << endl;
-	while (choice != 3) {
-		cout << "\nAdmin actions" << endl;
-		cout << "1. Access Records\n2. Access Reports\n3. Sign Out" << endl;
-		cout << "\nEnter chosen action : ";
-		cin >> choice;
+    //checking student vector for matching username
+    studentVtr = readingStudentCSV(studentVtr, studentDataVtr);
+    for (k = 0; k < studentVtr.size(); k++) {
+        if (studentVtr[k].accountDetails.username == username) {
+            usernameFound = true;
+            positionType = "student";
+            break;
+        }
+    }
 
-		switch (choice) {
-		case 1:
-			cout << "\nRecords" << endl;
-			cout << "1. Student Records\n2. Class Records" << endl;
-			cout << "\nEnter chosen action : ";
-			cin >> recordChoice;
-			//Student Records start
-			if (recordChoice == 1) {
-				cout << "\nRecords" << endl;
-				cout << "1. Add new student\n2. Edit student record\n3. Delete student record" << endl;
-				cout << "\nEnter chosen action : ";
-				cin >> studRecChoice;
-				if (studRecChoice == 1) {
-					cout << "\n\t\t\t<-New Student Record->" << endl;
-					addingStudentCSV(studentPtr, studentsVtr, emptyDataVtr);
-				}
-				else if (studRecChoice == 2) {
-					cout << "\n\t\t\t<-Edit existing student record->" << endl;
-					studentsVtr = updatingStudentCSV(studentsVtr, emptyDataVtr);
-				}
-				else if (studRecChoice == 3) {
-					//delete student record
-				}
-				else {
-					cout << "Invalid Input : Please enter a number from 1 to 3" << endl;
-				}
-			}//Student Records end
-			//Class Records start
-			else {
-				cout << "1. Display Class 1 records\n2. Display Class 2 records" << endl;
-				cout << "\nEnter chosen action : ";
-				cin >> classRecordChoice;
-				//Print class records
-				if (classRecordChoice == 1) {
-					//Print class 1 records
-					cout << "Class 1" << endl;
-					displayRecords(studentPtr, studentsVtr, classRecordChoice);
-				}
-				else {
-					//Print class 2 records
-					cout << "Class 2" << endl;
-					displayRecords(studentPtr, studentsVtr, classRecordChoice);
-				}
-			}//Class Records end
-			break;
-		case 2:
-			cout << "\nReports" << endl;
-			cout << "\n1. Display reports\n2. Edit reports" << endl;
-			cout << "\nEnter chosen action : ";
-			cin >> rprtChoice;
-			if (rprtChoice == 1) { //display reports
-				cout << "Which class reports would you like to view?";
-				cout << "\n1. Class 1 reports\n2. Class 2 reports" << endl;
-				cout << "\nEnter chosen action : ";
-				cin >> displayRprtChoice;
-				if (displayRprtChoice == 1) { //display class 1 reports
-					cout << "Class 1" << endl;
-					displayReport(studentPtr, studentsVtr, displayRprtChoice);
-				}
-				else if (displayRprtChoice == 2) { //display class 2 reports
-					cout << "Class 2" << endl;
-					displayReport(studentPtr, studentsVtr, displayRprtChoice);
-				}
-				else {
-					cout << "\nInvalid Input : Please enter 1 or 2" << endl;
-				}
-			}
-			else if (rprtChoice == 2) { //edit reports
-				//cout << "\nEdit Student Report" << endl;
-				// starLine(20);
-				//cout << "\nEnter I.D. a student's number";
-			}
-			else {
-				cout << "\nInvalid Input : Please enter 1 or 2" << endl;
-			}
-			break;
-		case 3:
-			cout << "\nYou have successfully signed out" << endl;
-			return;
-		}
-	}
-}
-//Janelle's code end
+    //checking parent vector for matching username
+    parentVtr = readingParentCSV(parentVtr, parentDataVtr);
+    for (l = 0; l < parentVtr.size(); l++) {
+        if (parentVtr[l].accountDetails.username == username) {
+            usernameFound = true;
+            positionType = "parent";
+            break;
+        }
+    }
 
-//Livs Code
-void studentParentReportScreen(struct Student* studentPtr, struct Parent* parentPtr, vector<Student> studentsVtr, vector<Parent> parentVtr, int signupOption) { /*Parents Report Screen is so the parent is able to see the current reports
-									or notes on their child academically and behaviour wise */
-	schoolTitle();
-	//Title output
-	cout << "\n\t\t\t<-Signed in as ";
-	if (signupOption == 3) {
-		cout << "student->";
-	}
-	else {
-		cout << "parent->";
-	}
+    if (!usernameFound) {
+        cout << "Error : No account under that user name was found" << endl;
+    }
+    else {
+    reenterPassword:
+        cout << "Enter password : ";
+        cin >> password;
+        if (positionType == "teacher") {
+            for (m = 0; m < teacherVtr.size(); m++) {
+                if (teacherVtr[m].accountDetails.password == password) {
+                    passwordFound = true;
+                    break;
+                }
+            }
+        }
+        else if (positionType == "admin") {
+            for (n = 0; n < adminVtr.size(); n++) {
+                if (adminVtr[n].accountDetails.password == password) {
+                    passwordFound = true;
+                    break;
+                }
+            }
+        }
+        else if (positionType == "student") {
+            for (p = 0; p < studentVtr.size(); p++) {
+                if (studentVtr[p].accountDetails.password == password) {
+                    passwordFound = true;
+                    id = studentVtr[p].id;
+                    break;
+                }
+            }
+        }
+        else {
+            for (q = 0; q < parentVtr.size(); q++) {
+                if (parentVtr[q].accountDetails.password == password) {
+                    passwordFound = true;
+                    id = parentVtr[q].studentID;
+                    break;
+                }
+            }
+        }
 
-	cout << "\nJacks Current Report"; //Will replace with the s->studentusername for the name
-	cout << "\n<-2. View Exclusive School Notices->" << endl;
-	cout << "\n<-3. Settings->" << endl;
+        if (!passwordFound) {
+            passwordAttempt++;
+            if (passwordAttempt == 3) {
+                cout << "Password entered incorrectly 3 times. Please try again later." << endl;
+                return;
+            }
+            else {
+                cout << "Password entered incorrectly. " << 3 - passwordAttempt << " attempt(s) left." << endl;
+                goto reenterPassword;
+            }
+        }
+        else {
+            if (positionType == "teacher") {
+                //call teacher scree
+                teachActions(teacherPtr, studentPtr, teacherVtr, studentVtr, teacherDataVtr, studentDataVtr);
+            }
+            else if (positionType == "admin") {
+                //call admin screen
+                adminActions(adminPtr, studentPtr, adminVtr, studentVtr, adminDataVtr, studentDataVtr);
+            }
+            else if (positionType == "student") {
+                //call student/parent screen
+                studentParentActions(studentPtr, parentPtr, studentVtr, parentVtr, studentDataVtr, parentDataVtr, id, 3);
+            }
+            else {
+                //call student/parent screen
+                studentParentActions(studentPtr, parentPtr, studentVtr, parentVtr, studentDataVtr, parentDataVtr, id, 4);
+            }
+        }
+    }
 }
 
-//Livs Code 
-void studentParentNotices(struct Student* studentPtr, struct Parent* parentPtr, vector<Student> studentsVtr, vector<Parent> parentVtr, int signupOption) { /*this current codes main use is "parent* pn" but also pulling from parent account
-											which is parent* a as hoping to connect with the parent account username??*/
+//----------------------------------TEACHER SECTION----------------------------------
+//Janelle's code
+vector<Teacher> storeTeacherVtr(vector<Teacher> teacherVtr, vector<string> teacherDataVtr) {
+    Teacher tchr;
 
-	schoolTitle();
-	//name output beside school name
-	cout << "\t\t\t<-Signed in as ";
-	if (signupOption == 3) {
-		cout << "student->";
-	}
-	else {
-		cout << "parent->";
-	}
-	cout << "\nSchool Notices: Monday" << endl;
-	cout << "\n\n8.30am: Show And Tell" << endl;
-	cout << "\nMake Sure Your Child Has Brought Something Awesome To Share! :)" << endl;
-	cout << "\n12.30: School Lunch" << endl;
-	cout << "\nShared Lunch! Bring Something Scrumtious! :P" << endl;
-	cout << "\n1pm: Sports" << endl;
-	starLine(66);
-	cout << "\n\n\n<-1. View Your Childs Reports->" << endl;
-	cout << "\n<-3. Settings->" << endl;
+    tchr.firstName = teacherDataVtr[0];
+    tchr.lastName = teacherDataVtr[1];
+    tchr.gender = teacherDataVtr[2];
+    tchr.email = teacherDataVtr[3];
+    tchr.contactNum = stoi(teacherDataVtr[4]);
+    tchr.classNum = stoi(teacherDataVtr[5]);
+    tchr.yearTeaching = stoi(teacherDataVtr[6]);
+    tchr.accountDetails.username = teacherDataVtr[7];
+    tchr.accountDetails.password = teacherDataVtr[8];
+
+    teacherVtr.push_back(tchr);
+
+    return teacherVtr;
 }
 
+//Janelle's code
+vector<Teacher> readingTeacherCSV(vector<Teacher> teacherVtr, vector<string> teacherDataVtr) {
+    string line, currentStr;
+
+    ifstream readingFromTeacherCSV;
+    readingFromTeacherCSV.open("teacher.csv", ios::in);
+
+    while (getline(readingFromTeacherCSV, line)) {
+        stringstream ss(line);
+
+        while (!ss.eof()) {
+            getline(ss, currentStr, ',');
+            teacherDataVtr.push_back(currentStr);//storing current data being read to studentDataVtr
+        }
+        teacherVtr = storeTeacherVtr(teacherVtr, teacherDataVtr);
+
+        teacherDataVtr.clear();
+    }
+    readingFromTeacherCSV.close();
+    return teacherVtr;
+}
+
+//Liv's code
+void teachActions(struct Teacher* teacherPtr, struct Student* studentPtr,
+    vector<Teacher> teacherVtr, vector<Student> studentVtr,
+    vector<string> teacherDataVtr, vector<string> studentDataVtr) {
+
+    int teacherChoice = 0, recordChoice, studRecChoice, classRecordChoice, displayRprtChoice, reportChoice;
+
+    schoolTitle();
+    cout << "\n\t\t\t<-Signed in as Teacher->" << endl;
+
+    while (teacherChoice != 3) {
+        cout << "\Teacher actions" << endl;
+        cout << "\n1. View Student Records\n2. View Student Reports\n3. Sign Out" << endl;
+        cout << "\nEnter Number For Chosen Option : ";
+        cin >> teacherChoice;
+
+        switch (teacherChoice) {
+        case 1:
+            //Student records
+            schoolTitle();
+            cout << "\n\t\t\t<-Student List->" << endl;
+            printStudentList(studentVtr, studentDataVtr);
+            break;
+        case 2:
+            schoolTitle();
+            cout << "\n\t\t\t<-Student Reports->" << endl;
+            cout << "1. View Class 1 records\n2. View Class 2 records\n3. Back" << endl;
+            cout << "\nEnter number for chosen option : ";
+            cin >> reportChoice;
+            cout << endl;
+            if (reportChoice == 1) {
+                cout << "\n\t\t\t<-Class 1 Records->" << endl;
+                printClassReports(studentVtr, studentDataVtr, 1);
+            }
+            else if (reportChoice == 2) {
+                cout << "\n\t\t\t<-Class 2 Records->" << endl;
+                printClassReports(studentVtr, studentDataVtr, 2);
+            }
+            else if (reportChoice == 3) {
+                break;
+            }
+            else {
+                cout << "\nInvalid input: Please enter a number from 1 to 2" << endl;
+                break;
+            }
+            break;
+        case 3:
+            cout << "\nSuccessfully signed out" << endl;
+            break;
+        default:
+            cout << "\nInvalid Input : Please enter a number from 1 to 3" << endl;
+        }
+    }
+
+}
+
+//----------------------------------ADMIN SECTION----------------------------------
+//Janelle's code
+vector<Admin> storeAdminVtr(vector<Admin> adminVtr, vector<string> adminDataVtr) {
+    Admin adm;
+
+    adm.firstName = adminDataVtr[0];
+    adm.lastName = adminDataVtr[1];
+    adm.email = adminDataVtr[2];
+    adm.accountDetails.username = adminDataVtr[3];
+    adm.accountDetails.password = adminDataVtr[4];
+
+    adminVtr.push_back(adm);
+
+    return adminVtr;
+}
+
+//Janelle's code
+vector<Admin> readingAdminCSV(vector<Admin> adminVtr, vector<string> adminDataVtr) {
+
+    string line, currentStr;
+
+    ifstream readingFromAdminCSV;
+    readingFromAdminCSV.open("admin.csv", ios::in);
+
+    while (getline(readingFromAdminCSV, line)) {
+        stringstream ss(line);
+
+        while (!ss.eof()) {
+            getline(ss, currentStr, ',');
+            adminDataVtr.push_back(currentStr);//storing current data being read to adminDataVtr
+        }
+        adminVtr = storeAdminVtr(adminVtr, adminDataVtr);
+
+        adminDataVtr.clear();
+    }
+    readingFromAdminCSV.close();
+
+    return adminVtr;
+}
+
+//Janelle's code
+void adminActions(struct Admin* adminPtr, struct Student* studentPtr,
+    vector<Admin> adminVtr, vector<Student> studentVtr,
+    vector<string> adminDataVtr, vector<string> studentDataVtr) {
+    int actionChoice = 0, recordChoice = 0, reportChoice = 0;
+
+    schoolTitle();
+
+    cout << "\n\t\t\t<-Signed in as Admin->" << endl;
+
+    while (actionChoice != 3) {
+        cout << "\nAdmin actions" << endl;
+        cout << "\n1. Access Records\n2. Access Reports\n3. Sign Out" << endl;
+        cout << "\nEnter number for chosen option: ";
+        cin >> actionChoice;
+
+        switch (actionChoice) {
+        case 1:
+            //student records
+            cout << "\nStudent Records" << endl;
+            cout << "1. Add new student\n2. Edit student record\n3. Delete student record\n4. Back" << endl;
+            cout << "\nEnter number for chosen option : ";
+            cin >> recordChoice;
+            cout << endl;
+            if (recordChoice == 1) {
+                cout << "\n\t\t\t<-New Student Record->" << endl;
+                writingStudentCSV(studentPtr, studentVtr, studentDataVtr);
+            }
+            else if (recordChoice == 2) {
+                cout << "\n\t\t\t<-Edit Student Record->" << endl;
+                updateStudentCSV(studentVtr, studentDataVtr);
+            }
+            else if (recordChoice == 3) {
+                DeleteBastardChild();
+            }
+            else if (recordChoice == 4) {
+                break;
+            }
+            else {
+                cout << "\nInvalid input: Please enter a number from 1 to 3" << endl;
+                break;
+            }
+            break;
+        case 2:
+            //student reports
+            cout << "\nStudent Reports" << endl;
+            cout << "1. Display Class 1 Reports\n2. Display Class 2 Reports" << endl;
+            cout << "\nEnter number for chosen option : ";
+            cin >> reportChoice;
+            cout << endl;
+            if (reportChoice == 1) {
+                cout << "\n\t\t\t<-Class 1 Reports->" << endl;
+                printClassReports(studentVtr, studentDataVtr, 1);
+            }
+            else if (reportChoice == 2) {
+                cout << "\n\t\t\t<-Class 2 Reports->" << endl;
+                printClassReports(studentVtr, studentDataVtr, 2);
+            }
+            else {
+                cout << "\nInvalid input: Please enter a number from 1 to 2" << endl;
+                break;
+            }
+            break;
+        case 3:
+            cout << "\nSuccessfully signed out" << endl;
+            break;
+        default:
+            cout << "\nInvalid Input : Please enter a number from 1 to 3" << endl;
+        }
+    }
+
+}
+
+void DeleteBastardChild() {
+    cout << "\n\t\t\t<-Delete Student Record->" << endl;
+    //Scott Code
+
+    cout << "Please Enter The ID Of The Student You Want To Delete (6 Chars MAX): ";
+    string str;
+    int id = 0;
+deletestudentchoice:
+    cin.ignore();
+    getline(cin, str);
+    if (!str.empty())
+    {
+        if (str.length() > 6) {
+            cout << "Value Needs To Be Less Than 6 Chars Long" << endl;
+            goto deletestudentchoice;
+        }
+        id = stoi(str);
+
+        if (id == 0 || id > 100) {
+            cout << "Please Enter A ID Between The Values Of 1 And 100" << endl;
+            goto deletestudentchoice;
+        }
+        cout << "test1";
+
+        vector<Student>test = {};
+        for (int i = 0; i < 2; i++) {
+            cout << i;
+
+            string filename = "class";
+            filename += to_string(i + 1);
+            filename += ".csv";
+            cout << filename << endl;
+
+            ifstream classfile;
+            string currentStr, line;
+            classfile.open(filename, ios::in);
+            vector<vector<string>>input;
+
+            while (classfile) {
+                string s;
+                if (!getline(classfile, s)) break;
+
+                istringstream ss(s);
+                vector<string> record;
+                while (ss) {
+                    string s;
+                    if (!getline(ss, s, ',')) break;
+                    cout << s;
+                    record.push_back(s);
+                }
+                input.push_back(record);
+
+            }
+
+            //while (!classfile.eof()) {
+            //    while (getline(classfile, line)) {
+            //        stringstream ss(line);
+
+            //        while (!ss.eof()) {
+            //            getline(ss, currentStr, ',');
+            //            cout << currentStr << endl;
+            //            input.push_back(currentStr);//storing current data being read to studentDataVtr
+            //        }
+            //        test = storeStudentVtr(test, input);
+            //    }
+            //}
+            
+            classfile.close();
+
+            //string tmp1;
+            //int id;
+            //string firstName = "";
+            //string lastName = "";
+            //string tmp2;
+            //int yearGroup;
+            //string tmp3;
+            //int classNum;
+            //string tmp4;
+            //int grade;
+            //string parentDetailsfirstName = "";
+            //string parentDetailslastName = "";
+            //string parentDetailsemail = "";
+            //string parentDetailsgender = "";
+            //string accountDetailsusername = "";
+            //string accountDetailspassword = "";
+
+            //getline(classfile, tmp1, ',');        
+            ////id = stoi(tmp1);
+            //getline(classfile, firstName, ',');
+            //getline(classfile, lastName, ',');
+            //getline(classfile, tmp2, ',');
+            ////yearGroup = stoi(tmp2);
+            //getline(classfile, tmp3, ',');
+            //// = stoi(tmp3);
+            //getline(classfile, tmp4, ',');
+            ////grade = stoi(tmp4);
+            //getline(classfile, parentDetailsfirstName, ',');
+            //getline(classfile, parentDetailslastName, ',');
+            //getline(classfile, parentDetailsemail, ',');
+            //getline(classfile, parentDetailsgender, ',');
+            //getline(classfile, accountDetailsusername, ',');
+            //getline(classfile, accountDetailspassword);
+
+            //cout << tmp1 << "," << firstName << "," << lastName << "," << tmp2 << "," << tmp3 << "," << tmp4 << "," << endl;
+
+            //Student stdnt = Student(id, firstName, lastName, yearGroup, classNum, grade);
+
+
+            //test.push_back(stdnt);
+        }
+        vector<Student>test2 = {};
+        for (int j = 0; j < test.size(); j++) {
+            if (!test[j].id == id) {
+                test2.push_back(test[j]);
+            }
+        }
+        /*ofstream rewrite(filename, ofstream::out | ofstream::trunc);
+
+        for (int j = 0; j < test2.size(); j++)
+        {
+            rewrite << test2[j].id << "," << test2[j].firstName << "," << test2[j].lastName << "," << test2[j].yearGroup << ","
+                << test2[j].classNum << "," << test2[j].grade << "," << test2[j].parentDetails.firstName << "," << test2[j].parentDetails.lastName << ","
+                << test2[j].parentDetails.email << "," << test2[j].parentDetails.gender << "," << test2[j].accountDetails.username
+                << "," << test2[j].accountDetails.password << endl;
+        }
+        classfile.close();
+        test.clear();*/
+
+    }
+    else {
+        cout << "Please Enter A Value" << endl;
+        goto deletestudentchoice;
+    }
+
+    //scott's code end
+}
+//----------------------------------ADMIN/STUDENT SECTION----------------------------------
+// //Janelle's code
+//write into CSV file
+void writingStudentCSV(struct Student* studentPtr, vector<Student> studentVtr, vector<string> studentDataVtr) {
+    schoolTitle();
+    cout << "\n\t\t\t<-Add new Student Record->" << endl;
+    cout << "\nEnter student details" << endl;
+    cout << "First name : ";
+    cin >> studentPtr->firstName;
+    cout << "Last name : ";
+    cin >> studentPtr->lastName;
+    cout << "Year group : ";
+    cin >> studentPtr->yearGroup;
+    cout << "Class Number : ";
+    cin >> studentPtr->classNum;
+    cout << "Average overall grade (%) : ";
+    cin >> studentPtr->grade;
+    cout << "Parent/guardian first name : ";
+    cin >> studentPtr->parentDetails.firstName;
+    cout << "Parent/guardian last name : ";
+    cin >> studentPtr->parentDetails.lastName;
+    cout << "Parent/guardian email : ";
+    cin >> studentPtr->parentDetails.email;
+    cout << "Parent/guardian gender : ";
+    cin >> studentPtr->parentDetails.gender;
+    cout << "Username : ";
+    cin >> studentPtr->accountDetails.username;
+    cout << "Password : ";
+    cin >> studentPtr->accountDetails.password;
+
+newId:
+    srand(time(NULL));
+    studentPtr->id = rand() % 100 + 1;
+    cout << "studentPtr->id = " << studentPtr->id << endl;
+    studentVtr = readingStudentCSV(studentVtr, studentDataVtr);
+
+    for (int i = 0; i < studentVtr.size(); i++) {
+        if (studentVtr[i].id == studentPtr->id) {
+            goto newId; // if student from file is already assigned to a student then assign new id
+        }
+    }
+
+    if (studentPtr->classNum == 1) {
+        ofstream writingToClass1CSV("class1.csv", ios::app);
+        writingToClass1CSV << studentPtr->id << "," << studentPtr->firstName << "," << studentPtr->lastName << "," << studentPtr->yearGroup << ","
+            << studentPtr->classNum << "," << studentPtr->grade << "," << studentPtr->parentDetails.firstName << "," << studentPtr->parentDetails.lastName << ","
+            << studentPtr->parentDetails.email << "," << studentPtr->parentDetails.gender << "," << studentPtr->accountDetails.username
+            << "," << studentPtr->accountDetails.password << endl;//writing to csv file
+        writingToClass1CSV.close();
+    }
+    else if (studentPtr->classNum == 2) {
+        ofstream writingToClass2CSV("class2.csv", ios::app);
+        writingToClass2CSV << studentPtr->id << "," << studentPtr->firstName << "," << studentPtr->lastName << "," << studentPtr->yearGroup << ","
+            << studentPtr->classNum << "," << studentPtr->grade << "," << studentPtr->parentDetails.firstName << "," << studentPtr->parentDetails.lastName << ","
+            << studentPtr->parentDetails.email << "," << studentPtr->parentDetails.gender << "," << studentPtr->accountDetails.username
+            << "," << studentPtr->accountDetails.password << endl;//writing to csv file
+        writingToClass2CSV.close();
+    }
+    else {
+        cout << "\nThere are no classes under that number" << endl;
+    }
+    readingStudentCSV(studentVtr, studentDataVtr);
+}
+
+//Janelle's code
+//store data into vector
+vector<Student> storeStudentVtr(vector<Student> studentVtr, vector<string> studentDataVtr) {
+    Student stdnt;
+
+    stdnt.id = stoi(studentDataVtr[0]);
+    stdnt.firstName = studentDataVtr[1];
+    stdnt.lastName = studentDataVtr[2];
+    stdnt.yearGroup = stoi(studentDataVtr[3]);
+    stdnt.classNum = stoi(studentDataVtr[4]);
+    stdnt.grade = stoi(studentDataVtr[5]);
+    stdnt.parentDetails.firstName = studentDataVtr[6];
+    stdnt.parentDetails.lastName = studentDataVtr[7];
+    stdnt.parentDetails.email = studentDataVtr[8];
+    stdnt.parentDetails.gender = studentDataVtr[9];
+    stdnt.accountDetails.username = studentDataVtr[10];
+    stdnt.accountDetails.password = studentDataVtr[11];
+
+    studentVtr.push_back(stdnt);
+    return studentVtr;
+}
+
+//Janelle's code
+//read from csv file and store into vector
+vector<Student> readingStudentCSV(vector<Student> studentVtr, vector<string> studentDataVtr) {
+
+    string line, currentStr, line2, currentStr2;
+
+    //CLASS 1
+    ifstream readingFromClass1CSV;
+    readingFromClass1CSV.open("class1.csv", ios::in);
+
+    while (getline(readingFromClass1CSV, line)) {
+        stringstream ss(line);
+
+        while (!ss.eof()) {
+            getline(ss, currentStr, ',');
+            studentDataVtr.push_back(currentStr);//storing current data being read to studentDataVtr
+        }
+        studentVtr = storeStudentVtr(studentVtr, studentDataVtr);
+        studentDataVtr.clear();
+    }
+    readingFromClass1CSV.close();
+
+    //CLASS 2
+    ifstream readingFromClass2CSV;
+    readingFromClass2CSV.open("class2.csv", ios::in);
+
+    while (getline(readingFromClass2CSV, line2)) {
+        stringstream ss2(line2);
+
+        while (!ss2.eof()) {
+            getline(ss2, currentStr2, ',');
+            studentDataVtr.push_back(currentStr2);//storing current data being read to studentDataVtr
+        }
+        studentVtr = storeStudentVtr(studentVtr, studentDataVtr);
+        studentDataVtr.clear();
+    }
+    readingFromClass2CSV.close();
+
+    return studentVtr;
+}
+
+//Janelle's code
+vector<Student> updateStudentCSV(vector<Student> studentVtr, vector<string> studentDataVtr) {
+
+    string firstName, lastName, guardianFirstName, guardianLastName, guardianEmail, guardianGender, username, password, newFirstName, newLastName, newGuardianFirstName, newGuardianLastName, newGuardianEmail, newGuardianGender, newUsername, newPassword;
+    char choice;
+    bool found = false;
+    int id, editChoice, yearGroup, classNumber, newYearGroup, newGrade, newClassNumber, i, j;
+
+    schoolTitle();
+
+    studentVtr = readingStudentCSV(studentVtr, studentDataVtr);
+
+    cout << "\n\t\t\t<-Update Student Record->" << endl;
+    cout << "\tPlease enter Student id : ";
+    cin >> id;
+
+    //loop through vector Student 
+    for (i = 0; i < studentVtr.size(); i++) {
+        //check if user input is equal to existing Student id
+        if (studentVtr[i].id == id) {
+            cout << "\nFirst Name : " << studentVtr[i].firstName
+                << "\nLast Name : " << studentVtr[i].lastName
+                << "\nYear Group : " << studentVtr[i].yearGroup
+                << "\nClass Number : " << studentVtr[i].classNum
+                << "\nStudent ID : " << studentVtr[i].id << endl;
+            cout << "Student found : Would you like to change student details (y/n)? : ";
+            cin >> choice;
+            if (tolower(choice) == 'y') {
+                found = true;
+                cout << "\nWhich student detail would you like to change?\n1. First Name\n2. Last Name\n3. Year Group\n4. Class Number\n5. Grade\n6. Parent/Guardian first name\n7. Parent/Guardian last name\n8. Parent/Guardian email\n9. Parent/Guardian gender\n10. Student Username\n11. Student Password" << endl;
+                cout << "Enter number for chosen option : ";
+                cin >> editChoice;
+                cout << endl;
+                switch (editChoice) {
+                case 1:
+                    //change student first name
+                    cout << "Enter new student first name : ";
+                    cin >> newFirstName;
+                    studentVtr[i].firstName = newFirstName;
+                    cout << "\nStudent first name has been successfully updated\n";
+                    break;
+                case 2:
+                    //change student last name
+                    cout << "Enter new student last name : ";
+                    cin >> newLastName;
+                    studentVtr[i].lastName = newLastName;
+                    cout << "\nStudent last name has been successfully updated\n";
+                    break;
+                case 3:
+                    //change student year group
+                    cout << "Enter new student year group : ";
+                    cin >> newYearGroup;
+                    studentVtr[i].yearGroup = newYearGroup;
+                    cout << "\nStudent year group has been successfully updated\n";
+                    break;
+                case 4:
+                    //change student class number
+                    cout << "Enter new student class number : ";
+                    cin >> newClassNumber;
+                    studentVtr[i].classNum = newClassNumber;
+                    cout << "\nStudent class number has been successfully updated\n";
+                    break;
+                case 5:
+                    //change student grade
+                    cout << "Enter new student grade (%) : ";
+                    cin >> newGrade;
+                    studentVtr[i].grade = newGrade;
+                    cout << "\nStudent student grade has been successfully updated\n";
+                    break;
+                case 6:
+                    //change parent first name
+                    cout << "Enter new parent/guardian first name : ";
+                    cin >> newGuardianFirstName;
+                    studentVtr[i].parentDetails.firstName = newGuardianFirstName;
+                    cout << "\nParent/guardian first name has been successfully updated\n";
+                    break;
+                case 7:
+                    //change parent last name
+                    cout << "Enter new parent/guardian last name : ";
+                    cin >> newGuardianLastName;
+                    studentVtr[i].parentDetails.lastName = newGuardianLastName;
+                    cout << "\nParent/guardian last name has been successfully updated\n";
+                    break;
+                case 8:
+                    //change parent email
+                    cout << "Enter new parent/guardian email : ";
+                    cin >> newGuardianEmail;
+                    studentVtr[i].parentDetails.email = newGuardianEmail;
+                    cout << "\nParent/guardian email has been successfully updated\n";
+                    break;
+                case 9:
+                    //change parent gender
+                    cout << "Enter new parent/guardian gender : ";
+                    cin >> newGuardianGender;
+                    studentVtr[i].parentDetails.gender = newGuardianGender;
+                    cout << "\nParent/guardian gender has been successfully updated\n";
+                    break;
+                case 10:
+                    //change student username
+                    cout << "Enter new student username : ";
+                    cin >> newUsername;
+                    studentVtr[i].accountDetails.username = newUsername;
+                    cout << "\nStudent username has been successfully updated\n";
+                    break;
+                case 11:
+                    //change student password
+                    cout << "Enter new student password : ";
+                    cin >> newPassword;
+                    studentVtr[i].accountDetails.password = newPassword;
+                    cout << "\nStudent password has been successfully updated\n";
+                    break;
+                default:
+                    cout << "\nInvalid input : please enter a number from 1 to 11" << endl;
+                }
+            }
+            else {
+                cout << "\nChanges cancelled" << endl;
+                /*break;*/
+            }
+            break;
+        }
+        else {
+            found = false;
+        }
+    }
+
+    ofstream clearClass1CSV("class1.csv", ios::trunc);//clearing current class1.csv file to get ready for rewriting
+    clearClass1CSV.close();
+    ofstream clearClass2CSV("class2.csv", ios::trunc);//clearing current class1.csv file to get ready for rewriting
+    clearClass2CSV.close();
+
+    if (!found) {
+        cout << "\n\tStudent not found\n\n";
+    }
+    else {
+        ////print Student again to show the changes
+        //printStudentList(studentVtr, studentDataVtr);
+
+        for (i = 0; i < studentVtr.size(); i++) {
+            //delete csv file and rewrite using app
+            if (studentVtr[i].classNum == 1) {
+                //ofstream updateClass1CSV("class1.csv", ios::in);
+                ofstream updateClass1CSV("class1.csv", ios::app);
+                updateClass1CSV << studentVtr[i].id << "," << studentVtr[i].firstName << "," << studentVtr[i].lastName << "," << studentVtr[i].yearGroup << ","
+                    << studentVtr[i].classNum << "," << studentVtr[i].grade << "," << studentVtr[i].parentDetails.firstName << "," << studentVtr[i].parentDetails.lastName << ","
+                    << studentVtr[i].parentDetails.email << "," << studentVtr[i].parentDetails.gender << "," << studentVtr[i].accountDetails.username
+                    << "," << studentVtr[i].accountDetails.password << endl;//writing to csv file
+                updateClass1CSV.close();
+            }
+            else if (studentVtr[i].classNum == 2) {
+                ofstream updateClass2CSV("class2.csv", ios::app);
+                updateClass2CSV << studentVtr[i].id << "," << studentVtr[i].firstName << "," << studentVtr[i].lastName << "," << studentVtr[i].yearGroup << ","
+                    << studentVtr[i].classNum << "," << studentVtr[i].grade << "," << studentVtr[i].parentDetails.firstName << "," << studentVtr[i].parentDetails.lastName << ","
+                    << studentVtr[i].parentDetails.email << "," << studentVtr[i].parentDetails.gender << "," << studentVtr[i].accountDetails.username
+                    << "," << studentVtr[i].accountDetails.password << endl;//writing to csv file
+                updateClass2CSV.close();
+
+            }
+        }
+    }
+    return studentVtr;
+}
+
+//Janelle's code
+void printStudentList(vector<Student> studentVtr, vector<string> studentDataVtr) {
+    studentVtr = readingStudentCSV(studentVtr, studentDataVtr);
+    for (int i = 0; i < studentVtr.size(); i++) {
+        cout << "\nStudent ID : " << studentVtr[i].id
+            << "\nStudent First Name : " << studentVtr[i].firstName
+            << "\nStudent Last Name : " << studentVtr[i].lastName
+            << "\nStudent Class Number : " << studentVtr[i].yearGroup
+            << "\nStudent Class Number : " << studentVtr[i].classNum
+            << "\nStudent Overall Grade : " << studentVtr[i].grade
+            << "\nParent/Guardian First Name : " << studentVtr[i].parentDetails.firstName
+            << "\nParent/Guardian Last Name : " << studentVtr[i].parentDetails.lastName
+            << "\nParent/Guardian Email : " << studentVtr[i].parentDetails.email
+            << "\nParent/Guardian Gender : " << studentVtr[i].parentDetails.gender
+            << "\nStudent Username : " << studentVtr[i].accountDetails.username
+            << "\nStudent Password : " << studentVtr[i].accountDetails.password << endl;
+    }
+}
+
+//Janelle's code
+void printClassReports(vector<Student> studentVtr, vector<string> studentDataVtr, int classNo) {
+    bool belowPass = false;
+    schoolTitle();
+    studentVtr = readingStudentCSV(studentVtr, studentDataVtr);
+
+    for (int i = 0; i < studentVtr.size(); i++) {
+        if (studentVtr[i].classNum == classNo) {
+            if (studentVtr[i].grade < 50) {
+                belowPass = true;
+            }
+            cout << "\nStudent ID : " << studentVtr[i].id
+                << "\nStudent Name : " << studentVtr[i].firstName << " " << studentVtr[i].lastName
+                << "\nStudent overall grade average (%): " << studentVtr[i].grade << endl;
+        }
+    }
+
+    //the following will only print if there are students with grades below 50%
+    if (belowPass == true) {
+        cout << "\nThe following student(s) have achieved overall grades below 50% and may be in need of extra help" << endl;
+        for (int j = 0; j < studentVtr.size(); j++) {
+            if (studentVtr[j].classNum == classNo && studentVtr[j].grade < 50) {
+                cout << "\nStudent ID : " << studentVtr[j].id
+                    << "\nStudent Name : " << studentVtr[j].firstName << " " << studentVtr[j].lastName
+                    << "\nStudent overall grade average : " << studentVtr[j].grade << endl;
+            }
+        }
+    }
+}
+
+//----------------------------------PARENT SECTION----------------------------------
+//Janelle's code
+vector<Parent> storeParentVtr(vector<Parent> parentVtr, vector<string> parentDataVtr) {
+    Parent prnt;
+
+    prnt.firstName = parentDataVtr[0];
+    prnt.lastName = parentDataVtr[1];
+    prnt.gender = parentDataVtr[2];
+    prnt.email = parentDataVtr[3];
+    prnt.contactNum = stoi(parentDataVtr[4]);
+    prnt.childName = parentDataVtr[5];
+    prnt.studentID = stoi(parentDataVtr[6]);
+    prnt.accountDetails.username = parentDataVtr[7];
+    prnt.accountDetails.password = parentDataVtr[8];
+
+    parentVtr.push_back(prnt);
+
+    return parentVtr;
+}
+
+//Janelle's code
+vector<Parent> readingParentCSV(vector<Parent> parentVtr, vector<string> parentDataVtr) {
+    string line, currentStr;
+    cout << "\n im at start of readingParentCSV" << endl;
+    ifstream readingFromParentCSV;
+    readingFromParentCSV.open("parent.csv", ios::in);
+
+    while (getline(readingFromParentCSV, line)) {
+        stringstream ss(line);
+
+        while (!ss.eof()) {
+            getline(ss, currentStr, ',');
+            parentDataVtr.push_back(currentStr);//storing current data being read to parentDataVtr
+        }
+        parentVtr = storeParentVtr(parentVtr, parentDataVtr);
+
+        parentDataVtr.clear();
+    }
+    readingFromParentCSV.close();
+    cout << "\n im at end of readingParentCSV" << endl;
+    return parentVtr;
+}
+
+//----------------------------------STUDENT/PARENT SECTION----------------------------------
 //Livs Code
 //PARENT/STUDENT SCREEN
-void studentParentActions(struct Student* studentPtr, struct Parent* parentPtr, vector<Student> studentsVtr, vector<Parent> parentVtr, int signupOption) { /*Parents Account, So Where she/he is able to find information about school or her child.*/
-	schoolTitle();
-	cout << "\n\t\t\t<-Signed in as ";
-	if (signupOption == 3) {
-		cout << "student->";
-	}
-	else {
-		cout << "parent->";
-	}
+void studentParentActions(struct Student* studentPtr, struct Parent* parentPtr,
+    vector<Student> studentVtr, vector<Parent> parentVtr, vector<string> studentDataVtr,
+    vector<string> parentDataVtr, int id, int signupOption) { /*Parents Account, So Where she/he is able to find information about school or her child.*/
 
-	cout << "\n\n\n<-1. View Your Childs Reports->" << endl;
-	cout << "\n<-2.View Exclusive School Notices->" << endl;
-	cout << "\n<-3. Settings->" << endl;//what is settings for?
+    schoolTitle();
 
-	cout << "\n\t\t\t\t\t\t\t\t1.End" << endl;
-	starLine(66);
+    cout << "\n\t\t\t<-Signed in as ";
+    if (signupOption == 3) {
+        cout << "Student->";
+    }
+    else {
+        cout << "Parent->";
+    }
+
+    cout << "\n\n\n<-1. View Your Childs Reports->" << endl;
+    cout << "\n<-2.View Exclusive School Notices->" << endl;
+    cout << "\n<-3. Settings->" << endl;//what is settings for?
+
+    cout << "\n\t\t\t\t\t\t\t\t1.End" << endl;
+    starLine(66);
 }
 
-//SIGNING UP INPUT DETAILS
-void writingToCSV(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Student* studentPtr, struct Parent* parentPtr,
-	vector<Teacher> teacherVtr, vector<Admin> adminVtr, vector<Student> studentsVtr, vector<Parent> parentVtr,
-	vector<string> teacherEmpData, vector<string> adminEmpData, vector<string> emptyDataVtr, vector<string> parentEmpData, int signupOption) {
+//Livs Code
+void studentParentNotices(struct Student* studentPtr, struct Parent* parentPtr,
+    vector<Student> studentVtr, vector<Parent> parentVtr,
+    vector<string> studentDataVtr, vector<string> parentDataVtr, int id, int signupOption) { /*this current codes main use is "parent* pn" but also pulling from parent account
+                                            which is parent* a as hoping to connect with the parent account username??*/
+    char choice;
 
-	//livs code start
-	schoolTitle();//Olivia's code
+    schoolTitle();
 
-	if (signupOption == 1) {
-		cout << "\n\t\t\t<-Teacher Signup->" << endl;//Title output
-		//Entering Signup information for output
-		cout << "\nPlease Enter Your FirstName: ";
-		cin >> teacherPtr->firstName;
-		cout << "\nPlease Enter Your LastName: ";
-		cin >> teacherPtr->lastName;
-		cout << "\nPlease Enter Your Gender: ";
-		cin >> teacherPtr->gender;
-		cout << "\nPlease Enter Your Email: ";
-		cin >> teacherPtr->email;
-		cout << "\nPlease Enter Your Contact Number: ";
-		cin >> teacherPtr->contactNum;
-		cout << "\nPlease Enter Your Classroom Number: ";
-		cin >> teacherPtr->classNum;
-		cout << "\nPlease Enter The Year Group Your Teaching: ";
-		cin >> teacherPtr->yearTeaching;
-		cout << "\nPlease Enter A Username: ";
-		cin >> teacherPtr->accountDetails.username;
-		cout << "\nPlease Enter A Password: ";
-		cin >> teacherPtr->accountDetails.password;
+    cout << "\nSchool Notices: Monday" << endl;
+    cout << "\n\n8.30am: Show And Tell" << endl;
+    cout << "\nMake Sure Your Child Has Brought Something Awesome To Share! :)" << endl;
+    cout << "\n12.30: School Lunch" << endl;
+    cout << "\nShared Lunch! Bring Something Scrumtious! :P" << endl;
+    cout << "\n1pm: Sports" << endl;
+    cout << "\nWould you like to return to main screen (y/n)? ";
+    cin >> choice;
 
-		cout << "\n\t\t\t1. Confirm SignUp" << endl;//Bottom Footer output
-
-		//Janelle's code start
-		ofstream teacherFile;
-		teacherFile.open("teachers.csv", ios::app);
-
-		teacherFile << teacherPtr->firstName << "," << teacherPtr->lastName << "," << teacherPtr->gender << "," << teacherPtr->email << ","
-			<< teacherPtr->contactNum << "," << teacherPtr->classNum << "," << teacherPtr->yearTeaching << "," << adminPtr->accountDetails.username
-			<< "," << adminPtr->accountDetails.password << endl; //writing user input into csv file
-		teacherFile.close();
-
-		//call teacher welcome screen
-
-		//Janelle's code end
-	}//livs code end
-	else if (signupOption == 2) {
-		//Janelle's code start
-		cout << "\n\t\t\t<-Admin Signup->" << endl;
-		cout << "\nEnter admin details" << endl;
-		cout << "First name : ";
-		cin >> adminPtr->firstName;
-		cout << "Last name : ";
-		cin >> adminPtr->lastName;
-		cout << "Email : ";
-		cin >> adminPtr->email;
-		cout << "Username : ";
-		cin >> adminPtr->accountDetails.username;
-		cout << "Password : ";
-		cin >> adminPtr->accountDetails.password;
-		//opening csv file
-		ofstream adminFile;
-		adminFile.open("admins.csv", ios::app);
-
-		adminFile << adminPtr->firstName << "," << adminPtr->lastName << "," << adminPtr->email << "," << adminPtr->accountDetails.username << "," << adminPtr->accountDetails.password << endl; //writing user input into csv file
-		adminFile.close();
-
-		adminActions(teacherPtr, adminPtr, studentPtr, parentPtr, teacherVtr, adminVtr, studentsVtr, parentVtr, teacherEmpData, adminEmpData, emptyDataVtr,
-			parentEmpData);
-	}
-	else if (signupOption == 3) {
-		cout << "\n\t\t\t<-Student Signup->" << endl;
-
-		addingStudentCSV(studentPtr, studentsVtr, emptyDataVtr);
-
-		studentParentActions(studentPtr, parentPtr, studentsVtr, parentVtr, signupOption);//call parent/student welcome screen
-		//Janelle's code end
-	}
-	else {
-		//Olivia's code start
-		cout << "\n\t\t\t<-Parents Signup->" << endl;//Title output
-		//Entering Signup information for parent information output
-		cout << "Please Enter Your FirstName: ";
-		cin >> parentPtr->firstName;
-		cout << "Please Enter Your LastName: ";
-		cin >> parentPtr->lastName;
-		cout << "Please Enter Your Gender: ";
-		cin >> parentPtr->gender;
-		cout << "Please Enter Your Email: ";
-		cin >> parentPtr->email;
-		cout << "Please Enter Your Contact Number: ";
-		cin >> parentPtr->contactNum;
-		cout << "Please Enter Your Child's Name : ";
-		cin >> parentPtr->childName;
-		cout << "Please Enter Your Child's Student ID: ";
-		cin >> parentPtr->studentID;
-		cout << "Please Enter A Username: ";
-		cin >> parentPtr->accountDetails.username;
-		cout << "Please Enter A Password: ";
-		cin >> parentPtr->accountDetails.password;
-
-		cout << "\n\t\t\t1. Confirm SignUp" << endl;//Bottom Footer output
-
-		//Janelle's code start
-		ofstream parentFile;
-		parentFile.open("parents.csv", ios::app);
-
-		parentFile << parentPtr->firstName << "," << parentPtr->lastName << "," << parentPtr->gender << "," << parentPtr->email << ","
-			<< parentPtr->contactNum << "," << parentPtr->childName << "," << parentPtr->studentID << "," << parentPtr->accountDetails.username
-			<< "," << parentPtr->accountDetails.password << endl; //writing user input into csv file
-		parentFile.close();
-		//call parent/student welcome screen
-		//Janelle's code end
-	}
-	//Olivia's code end
+    starLine(66);
+    cout << "\n\n\n<-1. View Your Childs Reports->" << endl;
+    cout << "\n<-3. Settings->" << endl;
 }
-//Janelle's code end
 
-//Janelle's code start
-void login(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Student* studentPtr, struct Parent* parentPtr,
-	vector<Teacher> teacherVtr, vector<Admin> adminVtr, vector<Student> studentsVtr, vector<Parent> parentVtr,
-	vector<string> teacherEmpData, vector<string> adminEmpData, vector<string> emptyDataVtr, vector<string> parentEmpData) {
-	int vectorSize;
-	string username, password;
-	char choice;
-	bool usernameFound = false, passwordFound = false;
-	int passwordAttempt = 0, i, j, k, l, m, n, p, q;
-	string positionType;
+//Livs Code
+void studentParentReportScreen(struct Student* studentPtr, struct Parent* parentPtr,
+    vector<Student> studentVtr, vector<Parent> parentVtr, vector<string> studentDataVtr,
+    vector<string> parentDataVtr, int id, int signupOption) { /*Parents Report Screen is so the parent is able to see the current reports
+                                    or notes on their child academically and behaviour wise */
+    cout << "\nJacks Current Report"; //Will replace with the s->studentusername for the name
+    cout << "\n<-2. View Exclusive School Notices->" << endl;
+    cout << "\n<-3. Settings->" << endl;
 
-	cout << "Enter username : ";
-	cin >> username;
-
-	//checking admin vector for matching username
-	teacherVtr = readingTeacherCSV(teacherVtr, teacherEmpData);
-	adminVtr = readingAdminCSV(adminVtr, adminEmpData);
-	studentsVtr = readingStudentCSV(studentsVtr, emptyDataVtr);
-	parentVtr = readingParentCSV(parentVtr, parentEmpData);
-	//cout << adminVtr.size() << endl;
-	//checking teacher vector for matching username
-	for (i = 0; i < teacherVtr.size(); i++) {
-		if (teacherVtr[i].accountDetails.username == username) {
-			usernameFound = true;
-			positionType = "teacher";
-			break;
-		}
-	}
-	//checking admin vector for matching username
-	for (j = 0; j < adminVtr.size(); j++) {
-		if (adminVtr[j].accountDetails.username == username) {
-			usernameFound = true;
-			//vectorSize = adminVtr.size();
-			positionType = "admin";
-			break;
-		}
-	}
-	//checking student vector for matching username
-	for (k = 0; k < studentsVtr.size(); k++) {
-		if (studentsVtr[k].accountDetails.username == username) {
-			usernameFound = true;
-			positionType = "student";
-			break;
-		}
-	}
-	//checking parent vector for matching username
-	for (l = 0; l < parentVtr.size(); l++) {
-		if (parentVtr[l].accountDetails.username == username) {
-			usernameFound = true;
-			positionType = "parent";
-			break;
-		}
-	}
-
-	if (!usernameFound) {
-		cout << "Error : No account under that user name was found" << endl;
-	}
-	else {
-		while (passwordAttempt < 3) {
-			cout << "Enter password : ";
-			cin >> password;
-			if (positionType == "teacher") {
-				for (m = 0; m < teacherVtr.size(); m++) {
-					if (teacherVtr[m].accountDetails.password == password) {
-						passwordFound = true;
-						break;
-					}
-				}
-			}
-			else if (positionType == "admin") {
-				for (n = 0; n < adminVtr.size(); n++) {
-					if (adminVtr[n].accountDetails.password == password) {
-						passwordFound = true;
-						break;
-					}
-				}
-			}
-			else if (positionType == "student") {
-				for (p = 0; p < studentsVtr.size(); p++) {
-					if (studentsVtr[p].accountDetails.password == password) {
-						passwordFound = true;
-						break;
-					}
-				}
-			}
-			else {
-				for (q = 0; q < parentVtr.size(); q++) {
-					if (parentVtr[q].accountDetails.password == password) {
-						passwordFound = true;
-						break;
-					}
-				}
-			}
-			if (!passwordFound) {
-				passwordAttempt++;
-				if (passwordAttempt == 3) {
-					cout << "Password entered incorrectly 3 times. Please try again later." << endl;
-					break;
-				}
-				else {
-					cout << "Password entered incorrectly. " << 3 - passwordAttempt << " attempt(s) left." << endl;
-				}
-			}
-			else {
-				adminActions(teacherPtr, adminPtr, studentPtr, parentPtr, teacherVtr, adminVtr, studentsVtr, parentVtr, teacherEmpData, adminEmpData, emptyDataVtr,
-					parentEmpData);
-				break;
-			}
-		}
-	}
+    //parentAction(studentPtr, parentPtr, studentVtr, parentVtr, signupOption);
 }
-//Janelle's code end
