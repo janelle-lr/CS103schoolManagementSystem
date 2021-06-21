@@ -1,7 +1,7 @@
 //School Management System
 //Group Project - Name: JANIV
 //Group Members - Liv & Janelle
-//Last Edited by Janelle 21/06/21
+//Last Edited by Janelle 21/06/21 class time
 
 #include <iostream>
 #include <fstream>
