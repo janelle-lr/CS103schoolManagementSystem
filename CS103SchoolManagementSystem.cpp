@@ -121,7 +121,7 @@ void studentParentNotices(struct Student* studentPtr, struct Parent* parentPtr,
 void studentParentReportScreen(struct Student* studentPtr, struct Parent* parentPtr,
     vector<Student> studentVtr, vector<Parent> parentVtr, vector<string> studentDataVtr,
     vector<string> parentDataVtr, int id, int signupOption);
-void DeleteBastardChild();
+void DeleteStudentRecord();
 
 int main()
 {
@@ -679,7 +679,7 @@ void adminActions(struct Admin* adminPtr, struct Student* studentPtr,
                 updateStudentCSV(studentVtr, studentDataVtr);
             }
             else if (recordChoice == 3) {
-                DeleteBastardChild();
+                DeleteStudentRecord();
             }
             else if (recordChoice == 4) {
                 break;
@@ -719,9 +719,9 @@ void adminActions(struct Admin* adminPtr, struct Student* studentPtr,
 
 }
 
-void DeleteBastardChild() {
+void DeleteStudentRecord() {
     cout << "\n\t\t\t<-Delete Student Record->" << endl;
-    //Scott Code
+    //Scott Code start
     cin.ignore();
 
     cout << "Please Enter The ID Of The Class That The Student You Want To Delete Is In (6 Chars MAX): ";
@@ -771,12 +771,12 @@ classchoice:
                 float f;
                 string b, c, g, h, i, j, k, l;
                 while (in.read_row(a, b, c, d, e, f, g, h, i, j, k, l)) {
-                    string Bastard = to_string(a) + "," + b + "," + c + "," + to_string(d) + "," + to_string(e) + "," + to_string(f) + "," + g + "," + h + "," + i + "," + j + "," + k + "," + l;
+                    string student = to_string(a) + "," + b + "," + c + "," + to_string(d) + "," + to_string(e) + "," + to_string(f) + "," + g + "," + h + "," + i + "," + j + "," + k + "," + l;
                     if (id == a) {
                         count++;
                     }
                     else {
-                        Students.push_back(Bastard);
+                        Students.push_back(student);
                     }
                 }
                 if (Students.size() > 0) {
@@ -1198,23 +1198,36 @@ vector<Parent> readingParentCSV(vector<Parent> parentVtr, vector<string> parentD
 void studentParentActions(struct Student* studentPtr, struct Parent* parentPtr,
     vector<Student> studentVtr, vector<Parent> parentVtr, vector<string> studentDataVtr,
     vector<string> parentDataVtr, int id, int signupOption) { /*Parents Account, So Where she/he is able to find information about school or her child.*/
+    int parentChoice = 0, recordChoice, studRecChoice, displayRprtChoice, reportChoice;
 
     schoolTitle();
+    cout << "\n\t\t\t<-Signed in as Parent->" << endl;
 
-    cout << "\n\t\t\t<-Signed in as ";
-    if (signupOption == 3) {
-        cout << "Student->";
+    while (parentChoice != 3) {
+        cout << "\nParent Actions" << endl;
+        cout << "\n1.View Your Childs Reports \n2. View Exclusive School Notices\n3. Sign Out" << endl;
+        cout << "\nEnter Number For Chosen Option : ";
+        cin >> parentChoice;
+
+        switch (parentChoice) {
+
+        case 1:
+            schoolTitle();
+            cout << "\n\n\n<-Student Report->" << endl;
+            studentParentReportScreen(studentPtr, parentPtr, studentVtr, parentVtr, studentDataVtr, parentDataVtr, id, signupOption);
+
+            break;
+        case 2:
+            cout << "\n<-School Notices->" << endl;
+            studentParentNotices(studentPtr, parentPtr, studentVtr, parentVtr, studentDataVtr, parentDataVtr, id, signupOption);
+            break;
+        case 3:
+            cout << "\nSuccessfully Signed Out, See You Next Time!" << endl;
+            break;
+        default:
+            cout << "\nInvalid Input : Please enter a number from 1 to 3" << endl;
+        }
     }
-    else {
-        cout << "Parent->";
-    }
-
-    cout << "\n\n\n<-1. View Your Childs Reports->" << endl;
-    cout << "\n<-2.View Exclusive School Notices->" << endl;
-    cout << "\n<-3. Settings->" << endl;//what is settings for?
-
-    cout << "\n\t\t\t\t\t\t\t\t1.End" << endl;
-    starLine(66);
 }
 
 //Livs Code
@@ -1234,10 +1247,12 @@ void studentParentNotices(struct Student* studentPtr, struct Parent* parentPtr,
     cout << "\n1pm: Sports" << endl;
     cout << "\nWould you like to return to main screen (y/n)? ";
     cin >> choice;
-
+    if (choice == tolower('y')) {
+        studentParentActions(studentPtr, parentPtr, studentVtr, parentVtr, studentDataVtr, parentDataVtr, id, signupOption);
+    }
     starLine(66);
-    cout << "\n\n\n<-1. View Your Childs Reports->" << endl;
-    cout << "\n<-3. Settings->" << endl;
+
+
 }
 
 //Livs Code
@@ -1245,9 +1260,30 @@ void studentParentReportScreen(struct Student* studentPtr, struct Parent* parent
     vector<Student> studentVtr, vector<Parent> parentVtr, vector<string> studentDataVtr,
     vector<string> parentDataVtr, int id, int signupOption) { /*Parents Report Screen is so the parent is able to see the current reports
                                     or notes on their child academically and behaviour wise */
-    cout << "\nJacks Current Report"; //Will replace with the s->studentusername for the name
-    cout << "\n<-2. View Exclusive School Notices->" << endl;
-    cout << "\n<-3. Settings->" << endl;
+                                    //cout << "\nJacks Current Report"; //Will replace with the s->studentusername for the name
+                                    //cout << "\n<-2. View Exclusive School Notices->" << endl;
+                                    //cout << "\n<-3. Settings->" << endl;
+    char choice;
+    for (int i = 0; i < studentVtr.size(); i++) {
+        if (studentVtr[i].id == id) {
+            cout << "Report For " << studentVtr[i].firstName << " " << studentVtr[i].lastName << endl;
 
-    //parentAction(studentPtr, parentPtr, studentVtr, parentVtr, signupOption);
+            cout << studentVtr[i].firstName << "\'\s Student ID is " << studentVtr[i].id << endl;
+
+            cout << studentVtr[i].firstName << "\'\s Overal Grade Average is " << studentVtr[i].grade << "%" << endl;
+
+            if (studentVtr[i].grade < 50) {
+                cout << "\n<-Feedback->" << endl;
+                cout << "\n" << studentVtr[i].firstName << "may be in need of required help please contact school office for more information" << endl;
+            }
+        }
+
+    }
+    cout << "\nWould you like to return to main screen (y/n)? ";
+    cin >> choice;
+    if (choice == tolower('y')) {
+        studentParentActions(studentPtr, parentPtr, studentVtr, parentVtr, studentDataVtr, parentDataVtr, id, signupOption);
+    }
+    starLine(66);
+
 }
