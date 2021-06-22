@@ -1,1 +1,31 @@
-﻿  CS103SchoolManagementSystem.vcxproj -> C:\Users\jmoir\Desktop\CS103schoolManagementSystem\Debug\CS103SchoolManagementSystem.exe
+﻿  CS103SchoolManagementSystem.cpp
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(340,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(342,30): warning C4553: '==': result of expression not used; did you intend '='?
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(357,58): error C2660: 'readingParentCSV': function does not take 2 arguments
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(113,16): message : see declaration of 'readingParentCSV'
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(364,30): warning C4553: '==': result of expression not used; did you intend '='?
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(396,19): warning C4018: '<': signed/unsigned mismatch
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(407,19): warning C4018: '<': signed/unsigned mismatch
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(418,19): warning C4018: '<': signed/unsigned mismatch
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(427,58): error C2660: 'readingParentCSV': function does not take 2 arguments
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(113,16): message : see declaration of 'readingParentCSV'
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(428,19): warning C4018: '<': signed/unsigned mismatch
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(444,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(452,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(460,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(469,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(563,17): warning C4129: 'T': unrecognized character escape sequence
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(734,47): warning C4018: '<': signed/unsigned mismatch
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(741,47): warning C4018: '<': signed/unsigned mismatch
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(832,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(837,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(945,19): warning C4018: '<': signed/unsigned mismatch
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(1066,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(1094,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(1116,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(1130,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(1192,21): error C2082: redefinition of formal parameter 'parentChoice'
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(1208,127): error C2660: 'studentParentNotices': function does not take 8 arguments
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(118,6): message : see declaration of 'studentParentNotices'
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(1213,132): error C2660: 'studentParentReportScreen': function does not take 8 arguments
+C:\Users\olivi\OneDrive\Desktop\CS103\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(121,6): message : see declaration of 'studentParentReportScreen'
