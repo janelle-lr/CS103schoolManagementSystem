@@ -1,4 +1,4 @@
-//School Management System
+//School Information System
 //Group Project - Name: JANIV
 //Group Members - Liv & Janelle
 
@@ -232,7 +232,7 @@ void starLine(int numOfStars) { // Output for Star Lines
 //Liv's code
 void schoolTitle() {
     system("CLS");// clears console
-    cout << "\n\t\tEVABEE SCHOOL MANAGEMENT SYSTEM" << endl;//Title output
+    cout << "\n\t\tEVABEE SCHOOL INFORMATION SYSTEM" << endl;//Title output
     starLine(66);
 }
 
