@@ -1,26 +1,2 @@
-﻿  CS103SchoolManagementSystem.cpp
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\csv.h(158,1): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\csv.h(175,49): warning C4244: 'return': conversion from 'std::streamsize' to 'int', possible loss of data
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\csv.h(191,62): warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(512,10): warning C4101: 'choice': unreferenced local variable
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(514,36): warning C4101: 'k': unreferenced local variable
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(510,9): warning C4101: 'vectorSize': unreferenced local variable
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(514,39): warning C4101: 'l': unreferenced local variable
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(514,33): warning C4101: 'j': unreferenced local variable
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(514,30): warning C4101: 'i': unreferenced local variable
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(663,17): warning C4129: 'T': unrecognized character escape sequence
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(658,76): warning C4101: 'displayRprtChoice': unreferenced local variable
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(658,42): warning C4101: 'studRecChoice': unreferenced local variable
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(658,57): warning C4101: 'classRecordChoice': unreferenced local variable
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(658,28): warning C4101: 'recordChoice': unreferenced local variable
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(877,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(980,25): warning C4101: 'yearGroup': unreferenced local variable
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(980,36): warning C4101: 'classNumber': unreferenced local variable
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(980,92): warning C4101: 'j': unreferenced local variable
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(1345,75): warning C4101: 'reportChoice': unreferenced local variable
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(1345,56): warning C4101: 'displayRprtChoice': unreferenced local variable
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(1345,41): warning C4101: 'studRecChoice': unreferenced local variable
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(1345,27): warning C4101: 'recordChoice': unreferenced local variable
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(1440,48): warning C4129: 's': unrecognized character escape sequence
-C:\Users\jmoir\Desktop\CS103schoolManagementSystem\CS103SchoolManagementSystem.cpp(1442,48): warning C4129: 's': unrecognized character escape sequence
+﻿  LINK : C:\Users\jmoir\Desktop\CS103schoolManagementSystem\x64\Debug\CS103SchoolManagementSystem.exe not found or not built by the last incremental link; performing full link
   CS103SchoolManagementSystem.vcxproj -> C:\Users\jmoir\Desktop\CS103schoolManagementSystem\x64\Debug\CS103SchoolManagementSystem.exe
