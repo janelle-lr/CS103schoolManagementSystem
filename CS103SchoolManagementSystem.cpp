@@ -896,7 +896,7 @@ newId:
     }
 
     cout << "Student's assigned ID number : " << studentPtr->id << endl;
-    Sleep(1000);
+    Sleep(1500);
     if (studentPtr->classNum == 1) {
         ofstream writingToClass1CSV("class1.csv", ios::app);
         writingToClass1CSV << studentPtr->id << "," << studentPtr->firstName << "," << studentPtr->lastName << "," << studentPtr->yearGroup << ","
@@ -1283,7 +1283,7 @@ void printClassReports(vector<Student> studentVtr, vector<string> studentDataVtr
             }
             cout << "\nStudent ID : " << studentVtr[i].id
                 << "\nStudent Name : " << studentVtr[i].firstName << " " << studentVtr[i].lastName
-                << "\nStudent overall grade average (% and solid numbers only): " << studentVtr[i].grade << endl;
+                << "\nStudent overall grade average: " << studentVtr[i].grade << "%" << endl;
             Sleep(400);
         }
     }
@@ -1296,7 +1296,7 @@ void printClassReports(vector<Student> studentVtr, vector<string> studentDataVtr
             if (studentVtr[j].classNum == classNo && studentVtr[j].grade < 50) {
                 cout << "\nStudent ID : " << studentVtr[j].id
                     << "\nStudent Name : " << studentVtr[j].firstName << " " << studentVtr[j].lastName
-                    << "\nStudent overall grade average : " << studentVtr[j].grade << endl;
+                    << "\nStudent overall grade average : " << studentVtr[j].grade << "%" << endl;
                 Sleep(400);
             }
         }
