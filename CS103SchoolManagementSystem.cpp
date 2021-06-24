@@ -109,7 +109,6 @@ void writingStudentCSV(struct Student* studentPtr, vector<Student> studentVtr, v
 vector<Student> storeStudentVtr(vector<Student>/* studentVtr*/, vector<string> /*studentDataVtr*/);
 vector<Student> readingStudentCSV(vector<Student> studentVtr, vector<string> studentDataVtr);
 vector<Student> updateStudentCSV(vector<Student> /*studentVtr*/, vector<string> /*studentDataVtr*/);
-void DeleteStudentRecord();
 void printStudentList(vector<Student>  studentVtr, vector<string> studentDataVtr);
 void printClassReports(vector<Student> studentVtr, vector<string> studentDataVtr, int classNo);
 //----------------------------------PARENT SECTION----------------------------------
@@ -823,98 +822,6 @@ void adminActions(struct Admin* adminPtr, struct Student* studentPtr,
     }
 
 }
-
-void DeleteStudentRecord() {
-    cout << "\n\t\t\t<-Delete Student Record->" << endl;
-    //Scott Code start
-    cin.ignore();
-
-    cout << "Please Enter The ID Of The Class That The Student You Want To Delete Is In (6 Chars MAX): ";
-    string str1;
-    int classid = 0;
-classchoice:
-    getline(cin, str1);
-    if (!str1.empty()) {
-        if (str1.length() > 6) {
-            cout << "Value Needs To Be Less Than 6 Chars Long" << endl;
-            goto classchoice;
-        }
-        classid = stoi(str1);
-
-        string filename = "class";
-        filename += to_string(classid);
-        filename += ".csv";
-
-        ifstream test(filename);
-
-        if (test.is_open()) {
-            test.close();
-            cout << "Please Enter The ID Of The Student You Want To Delete (6 Chars MAX): ";
-            string str;
-            int id = 0;
-        deletestudentchoice:
-
-            getline(cin, str);
-            if (!str.empty())
-            {
-                if (str.length() > 6) {
-                    cout << "Value Needs To Be Less Than 6 Chars Long" << endl;
-                    goto deletestudentchoice;
-                }
-                id = stoi(str);
-
-                if (id == 0 || id > 100) {
-                    cout << "Please Enter A ID Between The Values Of 1 And 100" << endl;
-                    goto deletestudentchoice;
-                }
-
-                vector<string>Students;
-
-                io::CSVReader<12> in(filename);
-                int a, d, e;
-                int count = 0;
-                float f;
-                string b, c, g, h, i, j, k, l;
-                while (in.read_row(a, b, c, d, e, f, g, h, i, j, k, l)) {
-                    string student = to_string(a) + "," + b + "," + c + "," + to_string(d) + "," + to_string(e) + "," + to_string(f) + "," + g + "," + h + "," + i + "," + j + "," + k + "," + l;
-                    if (id == a) {
-                        count++;
-                    }
-                    else {
-                        Students.push_back(student);
-                    }
-                }
-                if (Students.size() > 0) {
-                    ofstream write(filename, ofstream::out | ofstream::trunc);
-                    write.clear();
-                    for (int i = 0; i < Students.size(); i++) {
-                        write << Students[i] << endl;
-                    }
-                }
-                if (count == 0) {
-                    cout << "No Students Were Found That Are Matching The ID In The Class You Gave. Please Try Again: ";
-                    goto classchoice;
-                }
-            }
-            else {
-                cout << "Please Enter A Value" << endl;
-                goto deletestudentchoice;
-            }
-        }
-        else {
-            cout << "There Are No Classes That Match The Value You Have Given. Please Try Again: ";
-            goto classchoice;
-        }
-
-    }
-    else {
-        cout << "Please Enter A Value" << endl;
-        goto classchoice;
-    }
-
-
-    //scott's code end
-}
 //----------------------------------ADMIN/STUDENT SECTION----------------------------------
 // //Janelle's code
 //write into CSV file
@@ -1229,7 +1136,7 @@ vector<Student> updateStudentCSV(vector<Student> studentVtr, vector<string> stud
 
 //Scott's code
 void DeleteStudentRecord() {
-    cout << "\n\t\t\t<-Delete Student Record->" << endl;
+    cout << "\n\t\t\t<-Delete Student Record->\n" << endl;
     //Scott Code start
     cin.ignore();
 
@@ -1279,10 +1186,12 @@ classchoice:
                 int count = 0;
                 float f;
                 string b, c, g, h, i, j, k, l;
+                string name;
                 while (in.read_row(a, b, c, d, e, f, g, h, i, j, k, l)) {
                     string student = to_string(a) + "," + b + "," + c + "," + to_string(d) + "," + to_string(e) + "," + to_string(f) + "," + g + "," + h + "," + i + "," + j + "," + k + "," + l;
                     if (id == a) {
                         count++;
+                        name = b;
                     }
                     else {
                         Students.push_back(student);
@@ -1293,7 +1202,9 @@ classchoice:
                     write.clear();
                     for (int i = 0; i < Students.size(); i++) {
                         write << Students[i] << endl;
-                    }
+                    } 
+                    cout << "Student: " << name << " Has Been Deleted" << endl;
+                    Sleep(1500);
                 }
                 if (count == 0) {
                     cout << "No Students Were Found That Are Matching The ID In The Class You Gave. Please Try Again: ";
