@@ -157,6 +157,7 @@ int main()
     int menuOption, positionTypeSignUp, positionTypeLogin;
     bool validInput = false;
 
+
     //Janelle's code start
     while (validInput == false) {
         schoolTitle();//calling the school name
@@ -261,6 +262,7 @@ void introScreen() {
     starLine(66);
 }
 
+//Janelle's code
 bool usernameCheck(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Student* studentPtr, struct Parent* parentPtr,
     vector<Teacher> teacherVtr, vector<Admin> adminVtr, vector<Student> studentVtr, vector<Parent> parentVtr,
     vector<string> teacherDataVtr, vector<string> adminDataVtr, vector<string> studentDataVtr, vector<string> parentDataVtr, string username) {
@@ -269,6 +271,7 @@ bool usernameCheck(struct Teacher* teacherPtr, struct Admin* adminPtr, struct St
     //checking against teacherVtr to see if entered username already exists
     teacherVtr = readingTeacherCSV(teacherVtr, teacherDataVtr);
     for (int i = 0; i < teacherVtr.size(); i++) {
+        cout << "\nim checking teacher vector" << endl;
         if (teacherVtr[i].accountDetails.username == username) {
             usernameFound = true;
             return usernameFound;
@@ -281,6 +284,7 @@ bool usernameCheck(struct Teacher* teacherPtr, struct Admin* adminPtr, struct St
     //checking against adminVtr to see if entered username already exists
     adminVtr = readingAdminCSV(adminVtr, adminDataVtr);
     for (int j = 0; j < adminVtr.size(); j++) {
+        cout << "\nim checking admin vector" << endl;
         if (adminVtr[j].accountDetails.username == username) {
             usernameFound = true;
             return usernameFound;
@@ -293,6 +297,7 @@ bool usernameCheck(struct Teacher* teacherPtr, struct Admin* adminPtr, struct St
     //checking against studentVtr to see if entered username already exists
     studentVtr = readingStudentCSV(studentVtr, studentDataVtr);
     for (int k = 0; k < studentVtr.size(); k++) {
+        cout << "\nim checking student vector" << endl;
         if (studentVtr[k].accountDetails.username == username) {
             usernameFound = true;
             return usernameFound;
@@ -304,6 +309,7 @@ bool usernameCheck(struct Teacher* teacherPtr, struct Admin* adminPtr, struct St
 
     //checking against studentVtr to see if entered username already exists
     parentVtr = readingParentCSV(parentVtr, parentDataVtr);
+    cout << "\nim checking parent vector" << endl;
     for (int l = 0; l < parentVtr.size(); l++) {
         if (parentVtr[l].accountDetails.username == username) {
             usernameFound = true;
@@ -316,6 +322,7 @@ bool usernameCheck(struct Teacher* teacherPtr, struct Admin* adminPtr, struct St
     return usernameFound;
 }
 
+//Janelle's code
 void signUp(struct Teacher* teacherPtr, struct Admin* adminPtr, struct Student* studentPtr, struct Parent* parentPtr,
     vector<Teacher> teacherVtr, vector<Admin> adminVtr, vector<Student> studentVtr, vector<Parent> parentVtr,
     vector<string> teacherDataVtr, vector<string> adminDataVtr, vector<string> studentDataVtr, vector<string> parentDataVtr, int positionType) {
@@ -1251,6 +1258,8 @@ classchoice:
 
 //Janelle's code
 void printStudentList(vector<Student> studentVtr, vector<string> studentDataVtr) {
+    int returnChoice;
+
     studentVtr = readingStudentCSV(studentVtr, studentDataVtr);
     for (int i = 0; i < studentVtr.size(); i++) {
         cout << "\nStudent ID : " << studentVtr[i].id
@@ -1265,6 +1274,12 @@ void printStudentList(vector<Student> studentVtr, vector<string> studentDataVtr)
             << "\nParent/Guardian Gender : " << studentVtr[i].parentDetails.gender
             << "\nStudent Username : " << studentVtr[i].accountDetails.username
             << "\nStudent Password : " << studentVtr[i].accountDetails.password << endl;
+    }
+
+    cout << "\nEnter 1 to return to main screen : ";
+    cin >> returnChoice;
+    if (returnChoice == 1) {
+        return;
     }
 }
 
