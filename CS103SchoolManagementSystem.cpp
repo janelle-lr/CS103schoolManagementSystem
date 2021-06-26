@@ -271,7 +271,6 @@ bool usernameCheck(struct Teacher* teacherPtr, struct Admin* adminPtr, struct St
     //checking against teacherVtr to see if entered username already exists
     teacherVtr = readingTeacherCSV(teacherVtr, teacherDataVtr);
     for (int i = 0; i < teacherVtr.size(); i++) {
-        cout << "\nim checking teacher vector" << endl;
         if (teacherVtr[i].accountDetails.username == username) {
             usernameFound = true;
             return usernameFound;
@@ -284,7 +283,6 @@ bool usernameCheck(struct Teacher* teacherPtr, struct Admin* adminPtr, struct St
     //checking against adminVtr to see if entered username already exists
     adminVtr = readingAdminCSV(adminVtr, adminDataVtr);
     for (int j = 0; j < adminVtr.size(); j++) {
-        cout << "\nim checking admin vector" << endl;
         if (adminVtr[j].accountDetails.username == username) {
             usernameFound = true;
             return usernameFound;
@@ -297,7 +295,6 @@ bool usernameCheck(struct Teacher* teacherPtr, struct Admin* adminPtr, struct St
     //checking against studentVtr to see if entered username already exists
     studentVtr = readingStudentCSV(studentVtr, studentDataVtr);
     for (int k = 0; k < studentVtr.size(); k++) {
-        cout << "\nim checking student vector" << endl;
         if (studentVtr[k].accountDetails.username == username) {
             usernameFound = true;
             return usernameFound;
@@ -309,7 +306,6 @@ bool usernameCheck(struct Teacher* teacherPtr, struct Admin* adminPtr, struct St
 
     //checking against studentVtr to see if entered username already exists
     parentVtr = readingParentCSV(parentVtr, parentDataVtr);
-    cout << "\nim checking parent vector" << endl;
     for (int l = 0; l < parentVtr.size(); l++) {
         if (parentVtr[l].accountDetails.username == username) {
             usernameFound = true;
